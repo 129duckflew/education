@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="smart-doc">
+    <title>education</title>
+    <link rel="stylesheet" href="font.css">
+    <link rel="stylesheet" href="AllInOne.css?v=1678875865992"/>
+    
+    <style>.literalblock pre, .listingblock pre:not(.highlight), .listingblock pre[class="highlight"], .listingblock pre[class^="highlight "], .listingblock pre.CodeRay, .listingblock pre.prettyprint {
+        background: #f7f7f8;
+    }
+
+    .hljs {
+        padding: 0em;
+    }</style>
+    <script src="highlight.min.js"></script>
+    <script src="jquery.min.js"></script>
+</head>
+<body class="book toc2 toc-left">
+<div id="header"><h1>education</h1>
+    <div id="toc" class="toc2">
+        <div id="book-search-input"><input id="search" type="text" placeholder="Type to search"></div>
+        <div id="toctitle"><span>API Reference</span></div>
+        <ul id="accordion" class="sectlevel1">
+            <li class=""><a class="dd" href="api.html#header">1.&nbsp;支付相关接口</a>
+                <ul class="sectlevel2" style="display: none">
+                    <li><a
+                            href="api.html#_1_1_提供订单号发起支付">1.1.&nbsp;提供订单号发起支付</a>
+                    </li>
+
+                    <li><a
+                            href="api.html#_1_2_支付宝回调接口">1.2.&nbsp;支付宝回调接口</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="open"><a class="dd" href="AnswerController.html#header">2.&nbsp;回答相关接口</a>
+                <ul class="sectlevel2" style="display: block">
+                    <li><a
+                            href="AnswerController.html#_2_1_教授对问题发表回答或者修改已有的回答">2.1.&nbsp;教授对问题发表回答或者修改已有的回答</a>
+                    </li>
+
+                    <li><a
+                            href="AnswerController.html#_2_2_给回答点赞/取消点赞">2.2.&nbsp;给回答点赞/取消点赞</a>
+                    </li>
+
+                    <li><a
+                            href="AnswerController.html#_2_3_给回答添加收藏/取消收藏">2.3.&nbsp;给回答添加收藏/取消收藏</a>
+                    </li>
+
+                    <li><a
+                            href="AnswerController.html#_2_4_根据用户id获取收藏的回答">2.4.&nbsp;根据用户id获取收藏的回答</a>
+                    </li>
+
+                    <li><a
+                            href="AnswerController.html#_2_5_根据回答id获取详情">2.5.&nbsp;根据回答id获取详情</a>
+                    </li>
+                </ul>
+            </li>
+            <li class=""><a class="dd" href="ConsultAreaController.html#header">3.&nbsp;咨询领域相关接口</a>
+                <ul class="sectlevel2" style="display: none">
+                    <li><a
+                            href="ConsultAreaController.html#_3_1_获取所有顶层咨询领域">3.1.&nbsp;获取所有顶层咨询领域</a>
+                    </li>
+
+                    <li><a
+                            href="ConsultAreaController.html#_3_2_获取所有咨询领域(树形结构返回)">3.2.&nbsp;获取所有咨询领域(树形结构返回)</a>
+                    </li>
+
+                    <li><a
+                            href="ConsultAreaController.html#_3_3_根据父节点获取子节点">3.3.&nbsp;根据父节点获取子节点</a>
+                    </li>
+
+                    <li><a
+                            href="ConsultAreaController.html#_3_4_根据领域id 获取领域内容(不包含子节点)">3.4.&nbsp;根据领域id 获取领域内容(不包含子节点)</a>
+                    </li>
+                </ul>
+            </li>
+            <li class=""><a class="dd" href="ConsultController.html#header">4.&nbsp;咨询以及预约相关接口</a>
+                <ul class="sectlevel2" style="display: none">                </ul>
+            </li>
+            <li class=""><a class="dd" href="FileController.html#header">5.&nbsp;文件访问相关接口</a>
+                <ul class="sectlevel2" style="display: none">
+                    <li><a
+                            href="FileController.html#_5_1_根据文件id获取文件,所有的文件访问都通过这个接口">5.1.&nbsp;根据文件id获取文件,所有的文件访问都通过这个接口</a>
+                    </li>
+
+                    <li><a
+                            href="FileController.html#_5_2_教授简历上传,调用这个接口会上传头像文件返回文件id，获取id之后再调用指定的接口发生作用">5.2.&nbsp;教授简历上传,调用这个接口会上传头像文件返回文件id，获取id之后再调用指定的接口发生作用</a>
+                    </li>
+
+                    <li><a
+                            href="FileController.html#_5_3_上传学习资源">5.3.&nbsp;上传学习资源</a>
+                    </li>
+
+                    <li><a
+                            href="FileController.html#_5_4_上传头像">5.4.&nbsp;上传头像</a>
+                    </li>
+                </ul>
+            </li>
+            <li class=""><a class="dd" href="HomeController.html#header">6.&nbsp;主界面相关接口</a>
+                <ul class="sectlevel2" style="display: none">
+                    <li><a
+                            href="HomeController.html#_6_1_前台用户登录">6.1.&nbsp;前台用户登录</a>
+                    </li>
+
+                    <li><a
+                            href="HomeController.html#_6_2_邮箱验证注册成为咨询者">6.2.&nbsp;邮箱验证注册成为咨询者</a>
+                    </li>
+
+                    <li><a
+                            href="HomeController.html#_6_3_手机验证码注册">6.3.&nbsp;手机验证码注册</a>
+                    </li>
+
+                    <li><a
+                            href="HomeController.html#_6_4_获取绑定/注册邮箱验证码">6.4.&nbsp;获取绑定/注册邮箱验证码</a>
+                    </li>
+
+                    <li><a
+                            href="HomeController.html#_6_5_获取邮箱是否被绑定">6.5.&nbsp;获取邮箱是否被绑定</a>
+                    </li>
+
+                    <li><a
+                            href="HomeController.html#_6_6_获取短信验证码">6.6.&nbsp;获取短信验证码</a>
+                    </li>
+                </ul>
+            </li>
+            <li class=""><a class="dd" href="NewsController.html#header">7.&nbsp;资讯相关接口</a>
+                <ul class="sectlevel2" style="display: none">
+                    <li><a
+                            href="NewsController.html#_7_1_获取首页资讯">7.1.&nbsp;获取首页资讯</a>
+                    </li>
+
+                    <li><a
+                            href="NewsController.html#_7_2_根据id获取资讯">7.2.&nbsp;根据id获取资讯</a>
+                    </li>
+                </ul>
+            </li>
+            <li class=""><a class="dd" href="OrderController.html#header">8.&nbsp;订单相关接口</a>
+                <ul class="sectlevel2" style="display: none">
+                    <li><a
+                            href="OrderController.html#_8_1_分页获取用户订单">8.1.&nbsp;分页获取用户订单</a>
+                    </li>
+
+                    <li><a
+                            href="OrderController.html#_8_2_根据订单号查询订单">8.2.&nbsp;根据订单号查询订单</a>
+                    </li>
+                </ul>
+            </li>
+            <li class=""><a class="dd" href="ProfessorController.html#header">9.&nbsp;教授相关接口</a>
+                <ul class="sectlevel2" style="display: none">
+                    <li><a
+                            href="ProfessorController.html#_9_1_教授指定想要回答的问题的领域">9.1.&nbsp;教授指定想要回答的问题的领域</a>
+                    </li>
+
+                    <li><a
+                            href="ProfessorController.html#_9_2_根据咨询领域获取对应的教授列表">9.2.&nbsp;根据咨询领域获取对应的教授列表</a>
+                    </li>
+
+                    <li><a
+                            href="ProfessorController.html#_9_3_根据关键词搜索教授信息">9.3.&nbsp;根据关键词搜索教授信息</a>
+                    </li>
+
+                    <li><a
+                            href="ProfessorController.html#_9_4_修改个人简介">9.4.&nbsp;修改个人简介</a>
+                    </li>
+
+                    <li><a
+                            href="ProfessorController.html#_9_5_修改付费问答价格">9.5.&nbsp;修改付费问答价格</a>
+                    </li>
+
+                    <li><a
+                            href="ProfessorController.html#_9_6_根据教授id获取教授简介">9.6.&nbsp;根据教授id获取教授简介</a>
+                    </li>
+
+                    <li><a
+                            href="ProfessorController.html#_9_7_对教授发布评价">9.7.&nbsp;对教授发布评价</a>
+                    </li>
+
+                    <li><a
+                            href="ProfessorController.html#_9_8_查询教授评价">9.8.&nbsp;查询教授评价</a>
+                    </li>
+                </ul>
+            </li>
+            <li class=""><a class="dd" href="QuestionController.html#header">10.&nbsp;咨询问题 相关接口</a>
+                <ul class="sectlevel2" style="display: none">
+                    <li><a
+                            href="QuestionController.html#_10_1_用户发布问题">10.1.&nbsp;用户发布问题</a>
+                    </li>
+
+                    <li><a
+                            href="QuestionController.html#_10_2_用户发布付费提问">10.2.&nbsp;用户发布付费提问</a>
+                    </li>
+
+                    <li><a
+                            href="QuestionController.html#_10_3_根据问题id获取问题以及回答的列表">10.3.&nbsp;根据问题id获取问题以及回答的列表</a>
+                    </li>
+
+                    <li><a
+                            href="QuestionController.html#_10_4_根据用户id获取提问">10.4.&nbsp;根据用户id获取提问</a>
+                    </li>
+
+                    <li><a
+                            href="QuestionController.html#_10_5_获取问答推荐">10.5.&nbsp;获取问答推荐</a>
+                    </li>
+
+                    <li><a
+                            href="QuestionController.html#_10_6_给问题点赞">10.6.&nbsp;给问题点赞</a>
+                    </li>
+                </ul>
+            </li>
+            <li class=""><a class="dd" href="SearchController.html#header">11.&nbsp;搜索相关接口</a>
+                <ul class="sectlevel2" style="display: none">
+                    <li><a
+                            href="SearchController.html#_11_1_关键词分页搜索问答">11.1.&nbsp;关键词分页搜索问答</a>
+                    </li>
+                </ul>
+            </li>
+            <li class=""><a class="dd" href="StudyGuideController.html#header">12.&nbsp;学习导图相关接口</a>
+                <ul class="sectlevel2" style="display: none">
+                    <li><a
+                            href="StudyGuideController.html#_12_1_获取推荐的学习导图">12.1.&nbsp;获取推荐的学习导图</a>
+                    </li>
+
+                    <li><a
+                            href="StudyGuideController.html#_12_2_根据id获取学习导图详情">12.2.&nbsp;根据id获取学习导图详情</a>
+                    </li>
+                </ul>
+            </li>
+            <li class=""><a class="dd" href="StudyResourceController.html#header">13.&nbsp;学习资源相关接口</a>
+                <ul class="sectlevel2" style="display: none">
+                    <li><a
+                            href="StudyResourceController.html#_13_1_发布学习资源">13.1.&nbsp;发布学习资源</a>
+                    </li>
+
+                    <li><a
+                            href="StudyResourceController.html#_13_2_搜索学习资源">13.2.&nbsp;搜索学习资源</a>
+                    </li>
+
+                    <li><a
+                            href="StudyResourceController.html#_13_3_获取自己上传的所有资源">13.3.&nbsp;获取自己上传的所有资源</a>
+                    </li>
+                </ul>
+            </li>
+            <li class=""><a class="dd" href="SystemMsgController.html#header">14.&nbsp;系统消息接口</a>
+                <ul class="sectlevel2" style="display: none">
+                    <li><a
+                            href="SystemMsgController.html#_14_1_获取自己的所有未读消息总数">14.1.&nbsp;获取自己的所有未读消息总数</a>
+                    </li>
+
+                    <li><a
+                            href="SystemMsgController.html#_14_2_根据消息类型获取类别下的所有消息">14.2.&nbsp;根据消息类型获取类别下的所有消息</a>
+                    </li>
+
+                    <li><a
+                            href="SystemMsgController.html#_14_3_根据id获取消息详情">14.3.&nbsp;根据id获取消息详情</a>
+                    </li>
+
+                    <li><a
+                            href="SystemMsgController.html#_14_4_设置msgId消息已读">14.4.&nbsp;设置msgId消息已读</a>
+                    </li>
+
+                    <li><a
+                            href="SystemMsgController.html#_14_5_向某人发送私聊消息">14.5.&nbsp;向某人发送私聊消息</a>
+                    </li>
+
+                    <li><a
+                            href="SystemMsgController.html#_14_6_获取私聊用户列表">14.6.&nbsp;获取私聊用户列表</a>
+                    </li>
+
+                    <li><a
+                            href="SystemMsgController.html#_14_7_获取和某人的聊天记录">14.7.&nbsp;获取和某人的聊天记录</a>
+                    </li>
+
+                    <li><a
+                            href="SystemMsgController.html#_14_8_打开与某个对象的聊天窗口">14.8.&nbsp;打开与某个对象的聊天窗口</a>
+                    </li>
+                </ul>
+            </li>
+            <li class=""><a class="dd" href="UserController.html#header">15.&nbsp;用户相关接口</a>
+                <ul class="sectlevel2" style="display: none">
+                    <li><a
+                            href="UserController.html#_15_1_获取个人信息">15.1.&nbsp;获取个人信息</a>
+                    </li>
+
+                    <li><a
+                            href="UserController.html#_15_2_更改头像信息">15.2.&nbsp;更改头像信息</a>
+                    </li>
+
+                    <li><a
+                            href="UserController.html#_15_3_上传简历信息">15.3.&nbsp;上传简历信息</a>
+                    </li>
+
+                    <li><a
+                            href="UserController.html#_15_4_申请成为教授">15.4.&nbsp;申请成为教授</a>
+                    </li>
+
+                    <li><a
+                            href="UserController.html#_15_5_用户选择感兴趣的领域">15.5.&nbsp;用户选择感兴趣的领域</a>
+                    </li>
+
+                    <li><a
+                            href="UserController.html#_15_6_邮箱绑定">15.6.&nbsp;邮箱绑定</a>
+                    </li>
+
+                    <li><a
+                            href="UserController.html#_15_7_设置真名">15.7.&nbsp;设置真名</a>
+                    </li>
+
+                    <li><a
+                            href="UserController.html#_15_8_设置身份证号">15.8.&nbsp;设置身份证号</a>
+                    </li>
+
+                    <li><a
+                            href="UserController.html#_15_9_设置用户名">15.9.&nbsp;设置用户名</a>
+                    </li>
+
+                    <li><a
+                            href="UserController.html#_15_10_修改性别">15.10.&nbsp;修改性别</a>
+                    </li>
+
+                    <li><a
+                            href="UserController.html#_15_11_绑定手机号">15.11.&nbsp;绑定手机号</a>
+                    </li>
+
+                    <li><a
+                            href="UserController.html#_15_12_查询用户是否在线">15.12.&nbsp;查询用户是否在线</a>
+                    </li>
+
+                    <li><a
+                            href="UserController.html#_15_13_根据用户id获取头像">15.13.&nbsp;根据用户id获取头像</a>
+                    </li>
+
+                    <li><a
+                            href="UserController.html#_15_14_重置密码">15.14.&nbsp;重置密码</a>
+                    </li>
+
+                    <li><a
+                            href="UserController.html#_15_15_获取用户最后一次登录的记录 如果为空则是第一次登录系统">15.15.&nbsp;获取用户最后一次登录的记录 如果为空则是第一次登录系统</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>
+<div id="content">
+    <div class="sect1"><h2 id="_回答相关接口"><a class="anchor" href="#_回答相关接口"></a><a class="link" href="#_回答相关接口">2.&nbsp;回答相关接口</a>
+    </h2>
+        <div class="sectionbody">
+            <div class="sect2"><h3 id="_2_1_教授对问题发表回答或者修改已有的回答">
+                <a class="anchor" href="#_2_1_教授对问题发表回答或者修改已有的回答"></a>
+                <a class="link" href="#_2_1_教授对问题发表回答或者修改已有的回答">2.1.&nbsp;教授对问题发表回答或者修改已有的回答</a>
+            </h3>
+                <div class="paragraph"><p><strong>URL:</strong><a href="/answer/" class="bare">&nbsp;/answer/</a>
+                </p></div>
+                <div class="paragraph"><p><strong>Type:</strong>&nbsp;POST</p></div>
+                <div class="paragraph"><p><strong>Content-Type:</strong>&nbsp;application/json; charset=utf-8</p></div>
+                <div class="paragraph"><p><strong>Description:</strong>&nbsp;教授对问题发表回答或者修改已有的回答</p></div>
+                <div class="paragraph"><p><strong>Body-parameters:</strong></p></div>
+                <table class="tableblock frame-all grid-all spread">
+                    <colgroup>
+                        <col style="width: 20%;">
+                        <col style="width: 20%;">
+                        <col style="width: 20%;">
+                        <col style="width: 20%;">
+                        <col style="width: 20%;">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th class="tableblock halign-left valign-top">Parameter</th>
+                        <th class="tableblock halign-left valign-top">Type</th>
+                        <th class="tableblock halign-left valign-top">Description</th>
+                        <th class="tableblock halign-left valign-top">Required</th>
+                        <th class="tableblock halign-left valign-top">Since</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">questionId</p></td>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">int32</p></td>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">问题的id</p></td>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+                    </tr>
+
+                    <tr>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">answerText</p></td>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">No comments found.</p></td>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="paragraph"><p><strong>Request-example:</strong></p></div>
+                <div class="listingblock">
+                    <div class="content">
+                        <pre><code class="bash">curl -X POST -H 'Content-Type: application/json; charset=utf-8' -i /answer/ --data '{
+  "questionId": 884,
+  "answerText": "02hor2"
+}'</code></pre>
+                    </div>
+                </div>
+                <div class="paragraph"><p><strong>Response-example:</strong></p></div>
+                <div class="listingblock">
+                    <div class="content">
+                        <pre><code class="json">{}</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sect2"><h3 id="_2_2_给回答点赞/取消点赞">
+                <a class="anchor" href="#_2_2_给回答点赞/取消点赞"></a>
+                <a class="link" href="#_2_2_给回答点赞/取消点赞">2.2.&nbsp;给回答点赞/取消点赞</a>
+            </h3>
+                <div class="paragraph"><p><strong>URL:</strong><a href="/answer/like" class="bare">&nbsp;/answer/like</a>
+                </p></div>
+                <div class="paragraph"><p><strong>Type:</strong>&nbsp;POST</p></div>
+                <div class="paragraph"><p><strong>Content-Type:</strong>&nbsp;application/json; charset=utf-8</p></div>
+                <div class="paragraph"><p><strong>Description:</strong>&nbsp;给回答点赞/取消点赞</p></div>
+                <div class="paragraph"><p><strong>Body-parameters:</strong></p></div>
+                <table class="tableblock frame-all grid-all spread">
+                    <colgroup>
+                        <col style="width: 20%;">
+                        <col style="width: 20%;">
+                        <col style="width: 20%;">
+                        <col style="width: 20%;">
+                        <col style="width: 20%;">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th class="tableblock halign-left valign-top">Parameter</th>
+                        <th class="tableblock halign-left valign-top">Type</th>
+                        <th class="tableblock halign-left valign-top">Description</th>
+                        <th class="tableblock halign-left valign-top">Required</th>
+                        <th class="tableblock halign-left valign-top">Since</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">answerId</p></td>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">int32</p></td>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">回答的id</p></td>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+                    </tr>
+
+                    <tr>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">status</p></td>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">int32</p></td>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">点赞状态 1代表点赞 2代表取消了</p></td>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="paragraph"><p><strong>Request-example:</strong></p></div>
+                <div class="listingblock">
+                    <div class="content">
+                        <pre><code class="bash">curl -X POST -H 'Content-Type: application/json; charset=utf-8' -i /answer/like --data '{
+  "answerId": 977,
+  "status": 887
+}'</code></pre>
+                    </div>
+                </div>
+                <div class="paragraph"><p><strong>Response-example:</strong></p></div>
+                <div class="listingblock">
+                    <div class="content">
+                        <pre><code class="json">{}</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sect2"><h3 id="_2_3_给回答添加收藏/取消收藏">
+                <a class="anchor" href="#_2_3_给回答添加收藏/取消收藏"></a>
+                <a class="link" href="#_2_3_给回答添加收藏/取消收藏">2.3.&nbsp;给回答添加收藏/取消收藏</a>
+            </h3>
+                <div class="paragraph"><p><strong>URL:</strong><a href="/answer/collect" class="bare">&nbsp;/answer/collect</a>
+                </p></div>
+                <div class="paragraph"><p><strong>Type:</strong>&nbsp;POST</p></div>
+                <div class="paragraph"><p><strong>Content-Type:</strong>&nbsp;application/json; charset=utf-8</p></div>
+                <div class="paragraph"><p><strong>Description:</strong>&nbsp;给回答添加收藏/取消收藏</p></div>
+                <div class="paragraph"><p><strong>Body-parameters:</strong></p></div>
+                <table class="tableblock frame-all grid-all spread">
+                    <colgroup>
+                        <col style="width: 20%;">
+                        <col style="width: 20%;">
+                        <col style="width: 20%;">
+                        <col style="width: 20%;">
+                        <col style="width: 20%;">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th class="tableblock halign-left valign-top">Parameter</th>
+                        <th class="tableblock halign-left valign-top">Type</th>
+                        <th class="tableblock halign-left valign-top">Description</th>
+                        <th class="tableblock halign-left valign-top">Required</th>
+                        <th class="tableblock halign-left valign-top">Since</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">answerId</p></td>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">int32</p></td>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">回答的id</p></td>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+                    </tr>
+
+                    <tr>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">collectStatus</p></td>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">int32</p></td>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">收藏状态, 0为取消收藏，1为收藏</p></td>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="paragraph"><p><strong>Request-example:</strong></p></div>
+                <div class="listingblock">
+                    <div class="content">
+                        <pre><code class="bash">curl -X POST -H 'Content-Type: application/json; charset=utf-8' -i /answer/collect --data '{
+  "answerId": 353,
+  "collectStatus": 244
+}'</code></pre>
+                    </div>
+                </div>
+                <div class="paragraph"><p><strong>Response-example:</strong></p></div>
+                <div class="listingblock">
+                    <div class="content">
+                        <pre><code class="json">{}</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sect2"><h3 id="_2_4_根据用户id获取收藏的回答">
+                <a class="anchor" href="#_2_4_根据用户id获取收藏的回答"></a>
+                <a class="link" href="#_2_4_根据用户id获取收藏的回答">2.4.&nbsp;根据用户id获取收藏的回答</a>
+            </h3>
+                <div class="paragraph"><p><strong>URL:</strong><a href="/answer/collect/{userId}" class="bare">&nbsp;/answer/collect/{userId}</a>
+                </p></div>
+                <div class="paragraph"><p><strong>Type:</strong>&nbsp;GET</p></div>
+                <div class="paragraph"><p><strong>Content-Type:</strong>&nbsp;application/x-www-form-urlencoded;charset=utf-8</p></div>
+                <div class="paragraph"><p><strong>Description:</strong>&nbsp;需要登录</p></div>
+                <div class="paragraph"><p><strong>Path-parameters:</strong></p></div>
+                <table class="tableblock frame-all grid-all spread">
+                    <colgroup>
+                        <col style="width: 20%;">
+                        <col style="width: 20%;">
+                        <col style="width: 20%;">
+                        <col style="width: 20%;">
+                        <col style="width: 20%;">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th class="tableblock halign-left valign-top">Parameter</th>
+                        <th class="tableblock halign-left valign-top">Type</th>
+                        <th class="tableblock halign-left valign-top">Description</th>
+                        <th class="tableblock halign-left valign-top">Required</th>
+                        <th class="tableblock halign-left valign-top">Since</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">userId</p></td>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">int32</p></td>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">No comments found.</p></td>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="paragraph"><p><strong>Request-example:</strong></p></div>
+                <div class="listingblock">
+                    <div class="content">
+                        <pre><code class="bash">curl -X GET -i /answer/collect/345</code></pre>
+                    </div>
+                </div>
+                <div class="paragraph"><p><strong>Response-example:</strong></p></div>
+                <div class="listingblock">
+                    <div class="content">
+                        <pre><code class="json">{}</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sect2"><h3 id="_2_5_根据回答id获取详情">
+                <a class="anchor" href="#_2_5_根据回答id获取详情"></a>
+                <a class="link" href="#_2_5_根据回答id获取详情">2.5.&nbsp;根据回答id获取详情</a>
+            </h3>
+                <div class="paragraph"><p><strong>URL:</strong><a href="/answer/{answerId}" class="bare">&nbsp;/answer/{answerId}</a>
+                </p></div>
+                <div class="paragraph"><p><strong>Type:</strong>&nbsp;GET</p></div>
+                <div class="paragraph"><p><strong>Content-Type:</strong>&nbsp;application/x-www-form-urlencoded;charset=utf-8</p></div>
+                <div class="paragraph"><p><strong>Description:</strong>&nbsp;根据回答id获取详情</p></div>
+                <div class="paragraph"><p><strong>Path-parameters:</strong></p></div>
+                <table class="tableblock frame-all grid-all spread">
+                    <colgroup>
+                        <col style="width: 20%;">
+                        <col style="width: 20%;">
+                        <col style="width: 20%;">
+                        <col style="width: 20%;">
+                        <col style="width: 20%;">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th class="tableblock halign-left valign-top">Parameter</th>
+                        <th class="tableblock halign-left valign-top">Type</th>
+                        <th class="tableblock halign-left valign-top">Description</th>
+                        <th class="tableblock halign-left valign-top">Required</th>
+                        <th class="tableblock halign-left valign-top">Since</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">answerId</p></td>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">int32</p></td>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">No comments found.</p></td>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="paragraph"><p><strong>Request-example:</strong></p></div>
+                <div class="listingblock">
+                    <div class="content">
+                        <pre><code class="bash">curl -X GET -i /answer/280</code></pre>
+                    </div>
+                </div>
+                <div class="paragraph"><p><strong>Response-example:</strong></p></div>
+                <div class="listingblock">
+                    <div class="content">
+                        <pre><code class="json">{}</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="page-footer"><span class="copyright">Generated by smart-doc at 2023-03-15 18:24:25</span><span
+            class="footer-modification">Suggestions,contact,support and error reporting on<a
+            href="https://gitee.com/smart-doc-team/smart-doc" target="_blank">&nbsp;Gitee</a>&nbsp;or<a
+            href="https://github.com/smart-doc-group/smart-doc.git" target="_blank">&nbsp;Github</a></span></footer>
+</div>
+<script src="search.js?v=1678875865992"></script>
+<script>
+    $(function () {
+        const Accordion = function (el, multiple) {
+            this.el = el || {};
+            this.multiple = multiple || false;
+            const links = this.el.find('.dd');
+            links.on('click', {el: this.el, multiple: this.multiple}, this.dropdown);
+        };
+        Accordion.prototype.dropdown = function (e) {
+            const $el = e.data.el;
+            const $this = $(this), $next = $this.next();
+            $next.slideToggle();
+            $this.parent().toggleClass('open');
+            if (!e.data.multiple) {
+                $el.find('.submenu').not($next).slideUp("20").parent().removeClass('open');
+            }
+        };
+        new Accordion($('#accordion'), false);
+        hljs.highlightAll()
+    });
+</script>
+</body>
+</html>

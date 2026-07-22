@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="smart-doc">
+    <title>education</title>
+    <link rel="stylesheet" href="font.css">
+    <link rel="stylesheet" href="AllInOne.css?v=1662356225645"/>
+    
+    <style>.literalblock pre, .listingblock pre:not(.highlight), .listingblock pre[class="highlight"], .listingblock pre[class^="highlight "], .listingblock pre.CodeRay, .listingblock pre.prettyprint {
+        background: #f7f7f8;
+    }
+
+    .hljs {
+        padding: 0em;
+    }</style>
+    <script src="highlight.min.js"></script>
+    <script src="jquery.min.js"></script>
+</head>
+<body class="book toc2 toc-left">
+<div id="header"><h1>education</h1>
+    <div id="toc" class="toc2">
+        <div id="book-search-input"><input id="search" type="text" placeholder="Type to search"></div>
+        <div id="toctitle"><span>API Reference</span></div>
+        <ul id="accordion" class="sectlevel1">
+            <li class=""><a class="dd" href="api.html#header">1.&nbsp;咨询领域相关接口</a>
+                <ul class="sectlevel2" style="display: none">
+                    <li><a
+                            href="api.html#_1_1_获取所有顶层咨询领域">1.1.&nbsp;获取所有顶层咨询领域</a>
+                    </li>
+
+                    <li><a
+                            href="api.html#_1_2_获取所有咨询领域(树形结构返回)">1.2.&nbsp;获取所有咨询领域(树形结构返回)</a>
+                    </li>
+
+                    <li><a
+                            href="api.html#_1_3_添加一个咨询领域">1.3.&nbsp;添加一个咨询领域</a>
+                    </li>
+
+                    <li><a
+                            href="api.html#_1_4_批量添加咨询领域 暂时没做">1.4.&nbsp;批量添加咨询领域 暂时没做</a>
+                    </li>
+
+                    <li><a
+                            href="api.html#_1_5_根据id 递归删除咨询领域">1.5.&nbsp;根据id 递归删除咨询领域</a>
+                    </li>
+                </ul>
+            </li>
+            <li class=""><a class="dd" href="HomeController.html#header">2.&nbsp;主界面相关接口</a>
+                <ul class="sectlevel2" style="display: none">
+                    <li><a
+                            href="HomeController.html#_2_1_前台用户登录">2.1.&nbsp;前台用户登录</a>
+                    </li>
+
+                    <li><a
+                            href="HomeController.html#_2_2_邮箱验证注册成为咨询者">2.2.&nbsp;邮箱验证注册成为咨询者</a>
+                    </li>
+
+                    <li><a
+                            href="HomeController.html#_2_3_手机验证码注册">2.3.&nbsp;手机验证码注册</a>
+                    </li>
+
+                    <li><a
+                            href="HomeController.html#_2_4_获取绑定/注册邮箱验证码">2.4.&nbsp;获取绑定/注册邮箱验证码</a>
+                    </li>
+
+                    <li><a
+                            href="HomeController.html#_2_5_获取邮箱是否被绑定">2.5.&nbsp;获取邮箱是否被绑定</a>
+                    </li>
+
+                    <li><a
+                            href="HomeController.html#_2_6_获取短信验证码">2.6.&nbsp;获取短信验证码</a>
+                    </li>
+                </ul>
+            </li>
+            <li class=""><a class="dd" href="ProfessorController.html#header">3.&nbsp;教授相关接口</a>
+                <ul class="sectlevel2" style="display: none">
+                    <li><a
+                            href="ProfessorController.html#_3_1_获取所有的教授">3.1.&nbsp;获取所有的教授</a>
+                    </li>
+
+                    <li><a
+                            href="ProfessorController.html#_3_2_教授指定想要回答的问题的领域">3.2.&nbsp;教授指定想要回答的问题的领域</a>
+                    </li>
+
+                    <li><a
+                            href="ProfessorController.html#_3_3_根据咨询领域获取对应的教授列表">3.3.&nbsp;根据咨询领域获取对应的教授列表</a>
+                    </li>
+                </ul>
+            </li>
+            <li class=""><a class="dd" href="QuestionController.html#header">4.&nbsp;咨询问题 相关接口</a>
+                <ul class="sectlevel2" style="display: none">
+                    <li><a
+                            href="QuestionController.html#_4_1_用户发布问题">4.1.&nbsp;用户发布问题</a>
+                    </li>
+                </ul>
+            </li>
+            <li class=""><a class="dd" href="UserController.html#header">5.&nbsp;用户相关接口</a>
+                <ul class="sectlevel2" style="display: none">
+                    <li><a
+                            href="UserController.html#_5_1_获取个人信息">5.1.&nbsp;获取个人信息</a>
+                    </li>
+
+                    <li><a
+                            href="UserController.html#_5_2_申请成为教授">5.2.&nbsp;申请成为教授</a>
+                    </li>
+
+                    <li><a
+                            href="UserController.html#_5_3_教授简历上传">5.3.&nbsp;教授简历上传</a>
+                    </li>
+
+                    <li><a
+                            href="UserController.html#_5_4_上传并更新头像">5.4.&nbsp;上传并更新头像</a>
+                    </li>
+
+                    <li><a
+                            href="UserController.html#_5_5_用户选择感兴趣的领域">5.5.&nbsp;用户选择感兴趣的领域</a>
+                    </li>
+
+                    <li><a
+                            href="UserController.html#_5_6_邮箱绑定">5.6.&nbsp;邮箱绑定</a>
+                    </li>
+
+                    <li><a
+                            href="UserController.html#_5_7_设置用户名-针对手机号注册的用户">5.7.&nbsp;设置用户名-针对手机号注册的用户</a>
+                    </li>
+
+                    <li><a
+                            href="UserController.html#_5_8_用户绑定手机号">5.8.&nbsp;用户绑定手机号</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="open"><a class="dd" href="XueXinWangDataController.html#header">6.&nbsp;后台管理: 学信网数据相关接口</a>
+                <ul class="sectlevel2" style="display: block">
+                    <li><a
+                            href="XueXinWangDataController.html#_6_1_通过userId查询学信网的学历信息">6.1.&nbsp;通过userId查询学信网的学历信息</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>
+<div id="content">
+    <div class="sect1"><h2 id="_后台管理: 学信网数据相关接口"><a class="anchor" href="#_后台管理: 学信网数据相关接口"></a><a class="link" href="#_后台管理: 学信网数据相关接口">6.&nbsp;后台管理: 学信网数据相关接口</a>
+    </h2>
+        <div class="sectionbody">
+            <div class="sect2"><h3 id="_6_1_通过userId查询学信网的学历信息">
+                <a class="anchor" href="#_6_1_通过userId查询学信网的学历信息"></a>
+                <a class="link" href="#_6_1_通过userId查询学信网的学历信息">6.1.&nbsp;通过userId查询学信网的学历信息</a>
+            </h3>
+                <div class="paragraph"><p><strong>URL:</strong><a href="/edu_datasource/{userId}" class="bare">&nbsp;/edu_datasource/{userId}</a>
+                </p></div>
+                <div class="paragraph"><p><strong>Type:</strong>&nbsp;GET</p></div>
+                <div class="paragraph"><p><strong>Content-Type:</strong>&nbsp;application/x-www-form-urlencoded;charset=utf-8</p></div>
+                <div class="paragraph"><p><strong>Description:</strong>&nbsp;通过userId查询学信网的学历信息</p></div>
+                <div class="paragraph"><p><strong>Path-parameters:</strong></p></div>
+                <table class="tableblock frame-all grid-all spread">
+                    <colgroup>
+                        <col style="width: 20%;">
+                        <col style="width: 20%;">
+                        <col style="width: 20%;">
+                        <col style="width: 20%;">
+                        <col style="width: 20%;">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th class="tableblock halign-left valign-top">Parameter</th>
+                        <th class="tableblock halign-left valign-top">Type</th>
+                        <th class="tableblock halign-left valign-top">Description</th>
+                        <th class="tableblock halign-left valign-top">Required</th>
+                        <th class="tableblock halign-left valign-top">Since</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">userId</p></td>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">int32</p></td>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">用户ID</p></td>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="paragraph"><p><strong>Request-example:</strong></p></div>
+                <div class="listingblock">
+                    <div class="content">
+                        <pre><code class="bash">curl -X GET -i /edu_datasource/976</code></pre>
+                    </div>
+                </div>
+                <div class="paragraph"><p><strong>Response-example:</strong></p></div>
+                <div class="listingblock">
+                    <div class="content">
+                        <pre><code class="json">{
+  "code": 200,
+  "msg": "获取学信网数据成功",
+  "data": {
+    "baseInfo": {
+      "id": 1,
+      "cardId": "422324196006090014",
+      "realName": "李亮",
+      "birthday": "2001/3/23 上午12:00",
+      "birthPlace": "湖北省黄冈市",
+      "topEdu": "本科",
+      "topEduLevel": "学士",
+      "isAllDay": 1
+    },
+    "experience": [
+      {
+        "id": 1,
+        "eduDataSourceId": 1,
+        "startTime": "2019/9/1 下午2:42",
+        "endTime": "2023/6/15 下午2:42",
+        "schoolName": "武汉科技大学",
+        "eduLevel": "学士",
+        "isAllDay": 1
+      }
+    ]
+  }
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="page-footer"><span class="copyright">Generated by smart-doc at 2022-09-05 13:37:05</span><span
+            class="footer-modification">Suggestions,contact,support and error reporting on<a
+            href="https://gitee.com/smart-doc-team/smart-doc" target="_blank">&nbsp;Gitee</a>&nbsp;or<a
+            href="https://github.com/smart-doc-group/smart-doc.git" target="_blank">&nbsp;Github</a></span></footer>
+</div>
+<script src="search.js?v=1662356225645"></script>
+<script>
+    $(function () {
+        const Accordion = function (el, multiple) {
+            this.el = el || {};
+            this.multiple = multiple || false;
+            const links = this.el.find('.dd');
+            links.on('click', {el: this.el, multiple: this.multiple}, this.dropdown);
+        };
+        Accordion.prototype.dropdown = function (e) {
+            const $el = e.data.el;
+            const $this = $(this), $next = $this.next();
+            $next.slideToggle();
+            $this.parent().toggleClass('open');
+            if (!e.data.multiple) {
+                $el.find('.submenu').not($next).slideUp("20").parent().removeClass('open');
+            }
+        };
+        new Accordion($('#accordion'), false);
+        hljs.highlightAll()
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+spring:
+  mail:
+    host: ${MAIL_HOST}
+    username: ${MAIL_ACCOUNT}
+    password: ${MAIL_TOKEN}
+    default-encoding: utf-8
+    protocol: smtp
+    port: ${MAIL_SERVER_PORT}  # 网易25  #465或587

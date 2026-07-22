@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="cn.duckflew.mapper.StudyGuideMapper">
+ 
+    <delete id="deleteStudyGuide">
+        DELETE FROM study_guide WHERE  CONCAT(id,'') LIKE CONCAT(#{rootId},'%');
+    </delete>
+    <select id="getMaxChildId" resultType="java.lang.String">
+          SELECT id FROM study_guide WHERE parent_id=#{parentId} ORDER BY id DESC LIMIT 1;
+    </select>
+   
+</mapper>
