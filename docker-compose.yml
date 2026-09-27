@@ -1,137 +1,37 @@
-version: "3.6"
 services:
-  edu_mysql:
-    container_name: edu_mysql
-    image: mysql:5.7
+  db:
+    image: postgres:16-alpine
+    container_name: edu-postgres
     environment:
-      MYSQL_DATABASE: 'edu'
-      MYSQL_ROOT_PASSWORD: 'CHANGE_ME'
-      MYSQL_ROOT_HOST: '%'
+      POSTGRES_DB: education
+      POSTGRES_USER: education
+      POSTGRES_PASSWORD: education
     ports:
-    - 3306:3306
-    expose:
-      - '3306'
+      - "5432:5432"
     volumes:
-      - ./sql:/docker-entrypoint-initdb.d
-  edu_es:
-    image: elasticsearch:7.12.1
-    container_name: "edu_es"
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U education"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  backend:
+    build: ./backend
+    container_name: edu-backend
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_USER: education
+      DB_PASSWORD: education
+      JWT_SECRET: change-me-in-production-0123456789-abcdefghijklmn
+      CORS_ORIGINS: http://localhost:5173
+    ports:
+      - "8080:8080"
     volumes:
-      # - ./container-data/es/data:/usr/share/elasticsearch/data
-      - ./container-data/es/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
-      # - ./container-data/es/plugins:/usr/share/elasticsearch/plugins
-      # - ./container-data/es/es_backup:/usr/share/elasticsearch/es_backup
-    environment:
-      - "discovery.type=single-node"
-      - "bootstrap.memory_lock=true"
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-    ports:
-    - 9200:9200
-#    command: >
-#      sh -c '
-##        /bin/echo -e "y" | elasticsearch-plugin install https://github.com/medcl/elasticsearch-analysis-ik/releases/download/v7.14.0/elasticsearch-analysis-ik-7.14.0.zip &&
-#        /usr/local/bin/docker-entrypoint.sh
-#      '
-  edu_redis:
-    image: redis
-    container_name: "edu_redis"
-    ports:
-    - 6379:6379
-    environment:
-      - "REDIS_PASSWORD=CHANGE_ME"
-  edu_rabbitmq:
-    image: rabbitmq:3.8-management
-    hostname: rabbit
-    container_name: "edu_rabbitmq"
-    restart: always
-    environment:
-      - "RABBITMQ_DEFAULT_USER=root"
-      - "RABBITMQ_DEFAULT_PASS=CHANGE_ME"
-    ports:
-    - 15672:15672
-  minio:
-    image: minio/minio
-    container_name: "minio"
-    restart: always
-    ports:
-    - 9000:9000
-    - 9001:9001
-    environment:
-      - "MINIO_ROOT_USER=education"
-      - "MINIO_ROOT_PASSWORD=CHANGE_ME"
-    volumes:
-      - ./container-data/minio/data:/data
-    command: server /data --console-address ":9001"
-  edu-mail:
-    container_name: "edu-mail"
-    tty: true
-    build: ./edu-mail
-    depends_on:
-      - edu_mysql
-      - edu_rabbitmq
-      - minio
-      - edu_redis
-      - edu_es
-    environment:
-      MINIO_ACCESS_KEY: CHANGE_ME
-      MINIO_SECRET_KEY: CHANGE_ME
-      MINIO_ENDPOINT:
-      #网易: smtp.163.com
-      MAIL_HOST:
-      MAIL_ACCOUNT:
-      MAIL_TOKEN:
-      #网易smtp端口号 25
-      MAIL_SERVER_PORT:
-    ports:
-      - "8082:8082"
-  edu-web:
-    container_name: "edu-web"
-    tty: true
-    build: ./edu-web
-    ports:
-      - 8080:8080
-    depends_on:
-      - edu_mysql
-      - edu_rabbitmq
-      - minio
-      - edu_redis
-      - edu_es
-    environment:
-      MINIO_ACCESS_KEY: CHANGE_ME
-      MINIO_SECRET_KEY: CHANGE_ME
-      #网易: smtp.163.com
-      MAIL_HOST:
-      MAIL_ACCOUNT:
-      MAIL_TOKEN:
-      #网易smtp端口号 25
-      MAIL_SERVER_PORT:
-      MINIO_ENDPOINT:
-  edu-web-admin:
-    container_name: "edu-web-admin"
-    tty: true
-    build: ./edu-web-admin
-    depends_on:
-      - edu_mysql
-      - edu_rabbitmq
-      - minio
-      - edu_redis
-      - edu_es
-    environment:
-       MINIO_ACCESS_KEY: CHANGE_ME
-       MINIO_SECRET_KEY: CHANGE_ME
-      #网易: smtp.163.com
-       MAIL_HOST:
-       MAIL_ACCOUNT:
-       MAIL_TOKEN:
-      #网易smtp端口号 25
-       MAIL_SERVER_PORT:
-       MINIO_ENDPOINT:
-    ports:
-      - "8081:8081"
-  kibana:
-    image: docker.elastic.co/kibana/kibana:7.12.1
-    container_name: kibana
-    environment:
-      - ELASTICSEARCH_HOSTS=http://edu_es:9200
-    ports:
-      - 5601:5601
+      - filedata:/app/data/files
+
+volumes:
+  pgdata:
+  filedata:
