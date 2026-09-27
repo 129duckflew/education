@@ -1,9 +1,0 @@
-spring:
-  config:
-    import:
-      - classpath:application-minio.yaml
-      - classpath:application-mysql.yaml
-      - classpath:application-redis.yaml
-      - classpath:application-rabbitmq.yaml
-      - classpath:application-es.yaml
-      - classpath:application-mail.yaml

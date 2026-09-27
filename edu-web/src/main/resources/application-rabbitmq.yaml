@@ -1,6 +1,0 @@
-spring:
-  rabbitmq:
-    host: edu_rabbitmq
-    port: 5672
-    username: root
-    password: CHANGE_ME

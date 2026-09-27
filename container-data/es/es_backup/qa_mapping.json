@@ -1,1 +1,0 @@
-{"qa":{"mappings":{"properties":{"_class":{"type":"keyword","index":false,"doc_values":false},"answerId":{"type":"integer"},"answerText":{"type":"text","analyzer":"ik_max_word"},"id":{"type":"long"},"professorName":{"type":"keyword"},"questionDesc":{"type":"text","analyzer":"ik_max_word"},"questionId":{"type":"integer"},"questionTitle":{"type":"text","analyzer":"ik_max_word"}}}}}

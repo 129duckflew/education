@@ -1,0 +1,20 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+  flyway:
+    enabled: true
+
+app:
+  outbox:
+    poll-interval: 3600000
+  bootstrap:
+    admin:
+      enabled: false
+  mail:
+    enabled: false
+
+logging:
+  level:
+    org.testcontainers: warn

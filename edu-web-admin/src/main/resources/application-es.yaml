@@ -1,4 +1,0 @@
-spring:
-  elasticsearch:
-    rest:
-      uris: http://edu_es:9200

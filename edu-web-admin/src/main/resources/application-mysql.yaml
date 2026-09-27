@@ -1,6 +1,0 @@
-spring:
-  datasource:
-    url: jdbc:mysql://edu_mysql/edu?useUnicode=true&serverTimezone=Asia/Shanghai
-    username: root
-    password: CHANGE_ME
-    driver-class-name: com.mysql.cj.jdbc.Driver
