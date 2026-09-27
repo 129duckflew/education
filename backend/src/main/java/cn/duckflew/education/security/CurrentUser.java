@@ -31,6 +31,10 @@ public final class CurrentUser {
         return find().map(UserPrincipal::getId).orElse(null);
     }
 
+    public static UserRole roleOrNull() {
+        return find().map(UserPrincipal::getRole).orElse(null);
+    }
+
     public static UserRole role() {
         return find().map(UserPrincipal::getRole)
                 .orElseThrow(() -> new org.springframework.security.access.AccessDeniedException("未登录"));

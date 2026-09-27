@@ -22,6 +22,15 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
 
     List<Question> findByIdIn(Collection<Long> ids);
 
+    @Query("""
+            select distinct q from Question q, QuestionArea qa
+            where qa.questionId = q.id and qa.areaId in :areaIds and q.status = :status
+            order by q.createdAt desc
+            """)
+    Page<Question> findRecommended(@Param("areaIds") Collection<Long> areaIds,
+                                   @Param("status") QuestionStatus status,
+                                   Pageable pageable);
+
     /**
      * 基于 pg_trgm 的模糊检索，按标题相似度排序。
      */

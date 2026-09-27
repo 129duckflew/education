@@ -3,6 +3,7 @@ package cn.duckflew.education.messaging;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -26,4 +27,11 @@ public interface DirectMessageRepository extends JpaRepository<DirectMessage, Lo
             group by case when m.fromUserId = :me then m.toUserId else m.fromUserId end
             """)
     List<Long> findConversationPartners(@Param("me") Long me);
+
+    @Modifying
+    @Query("""
+            update DirectMessage m set m.read = true
+            where m.toUserId = :userId and m.fromUserId = :otherId and m.read = false
+            """)
+    int markConversationRead(@Param("userId") Long userId, @Param("otherId") Long otherId);
 }

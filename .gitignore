@@ -29,3 +29,5 @@ logs
 */**/target
 .vscode
 container-data/minio
+# Serena config
+.serena/
