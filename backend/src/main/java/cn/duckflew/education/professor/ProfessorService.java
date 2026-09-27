@@ -157,6 +157,19 @@ public class ProfessorService {
     }
 
     @Transactional(readOnly = true)
+    public java.util.Optional<ProfessorSelfView> myProfile(Long userId) {
+        return profileRepository.findById(userId).map(p -> new ProfessorSelfView(
+                p.getUserId(),
+                p.isApproved(),
+                p.getJobRankId(),
+                p.getIntroduction(),
+                p.getConsultPrice(),
+                p.getCvFileId(),
+                areaRepository.findByProfessorId(userId).stream().map(ProfessorArea::getAreaId).toList(),
+                educations(userId)));
+    }
+
+    @Transactional(readOnly = true)
     public ProfessorDetail detail(Long professorId) {
         ProfessorProfile profile = requireApprovedProfile(professorId);
         ProfessorSummary summary = toSummaries(List.of(profile)).get(0);

@@ -23,6 +23,9 @@ import { AdminUsersPage } from "@/pages/admin/AdminUsersPage"
 import { AdminProfessorsPage } from "@/pages/admin/AdminProfessorsPage"
 import { AdminAreasPage } from "@/pages/admin/AdminAreasPage"
 import { AdminNewsPage } from "@/pages/admin/AdminNewsPage"
+import { AdminTaxonomyPage } from "@/pages/admin/AdminTaxonomyPage"
+import { AdminGuidesPage } from "@/pages/admin/AdminGuidesPage"
+import { ProfessorCenterPage } from "@/pages/ProfessorCenterPage"
 
 export function App() {
   return (
@@ -43,6 +46,14 @@ export function App() {
         />
         <Route path="professors" element={<ProfessorsPage />} />
         <Route path="professors/:id" element={<ProfessorDetailPage />} />
+        <Route
+          path="professor/center"
+          element={
+            <RequireAuth>
+              <ProfessorCenterPage />
+            </RequireAuth>
+          }
+        />
         <Route path="news" element={<NewsPage />} />
         <Route path="news/:id" element={<NewsDetailPage />} />
         <Route path="guides" element={<GuidesPage />} />
@@ -80,6 +91,8 @@ export function App() {
         <Route path="users" element={<AdminUsersPage />} />
         <Route path="professors" element={<AdminProfessorsPage />} />
         <Route path="areas" element={<AdminAreasPage />} />
+        <Route path="taxonomy" element={<AdminTaxonomyPage />} />
+        <Route path="guides" element={<AdminGuidesPage />} />
         <Route path="news" element={<AdminNewsPage />} />
       </Route>
     </Routes>

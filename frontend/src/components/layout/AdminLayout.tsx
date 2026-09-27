@@ -1,5 +1,15 @@
 import { Link, NavLink, Outlet } from "react-router-dom"
-import { GraduationCap, LayoutDashboard, ListChecks, Map, Newspaper, Users, UserCog } from "lucide-react"
+import {
+  BookOpen,
+  GraduationCap,
+  LayoutDashboard,
+  ListChecks,
+  Map,
+  Newspaper,
+  School,
+  Users,
+  UserCog,
+} from "lucide-react"
 import { cn } from "@/lib/utils"
 
 const links = [
@@ -8,6 +18,8 @@ const links = [
   { to: "/admin/professors", label: "教授认证", icon: UserCog },
   { to: "/admin/users", label: "用户管理", icon: Users },
   { to: "/admin/areas", label: "领域管理", icon: Map },
+  { to: "/admin/taxonomy", label: "学校/专业", icon: School },
+  { to: "/admin/guides", label: "学习指南", icon: BookOpen },
   { to: "/admin/news", label: "资讯管理", icon: Newspaper },
 ]
 

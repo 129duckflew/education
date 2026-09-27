@@ -185,3 +185,48 @@ export interface FileInfo {
   size: number
   url: string
 }
+
+export interface JobRank {
+  id: number
+  name: string
+}
+
+export interface Degree {
+  id: number
+  name: string
+}
+
+export interface UniversityMajor {
+  id: number
+  code: string | null
+  name: string
+  parentId: number | null
+}
+
+export interface ResearchDirection {
+  id: number
+  name: string
+  majorId: number | null
+}
+
+export interface EducationView {
+  id: number
+  schoolName: string
+  majorName: string | null
+  degreeName: string | null
+  startDate: string | null
+  endDate: string | null
+  fullTime: boolean
+  researchDirection: string | null
+}
+
+export interface ProfessorSelfView {
+  userId: number
+  approved: boolean
+  jobRankId: number | null
+  introduction: string | null
+  consultPrice: number
+  cvFileId: number | null
+  areaIds: number[]
+  educations: EducationView[]
+}

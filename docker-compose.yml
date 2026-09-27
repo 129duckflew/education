@@ -1,20 +1,21 @@
 services:
   db:
     image: postgres:16-alpine
-    container_name: edu-postgres
+    container_name: edu-db
     environment:
       POSTGRES_DB: education
       POSTGRES_USER: education
       POSTGRES_PASSWORD: education
+    # 映射到宿主 5433，避免与宿主机自带的 PostgreSQL(5432) 冲突
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U education"]
+      test: ["CMD-SHELL", "pg_isready -U education -d education"]
       interval: 5s
       timeout: 3s
-      retries: 10
+      retries: 20
 
   backend:
     build: ./backend
@@ -26,11 +27,19 @@ services:
       DB_USER: education
       DB_PASSWORD: education
       JWT_SECRET: change-me-in-production-0123456789-abcdefghijklmn
-      CORS_ORIGINS: http://localhost:5173
+      CORS_ORIGINS: http://localhost:3000
     ports:
-      - "8080:8080"
+      - "8180:8080"
     volumes:
       - filedata:/app/data/files
+
+  frontend:
+    build: ./frontend
+    container_name: edu-frontend
+    depends_on:
+      - backend
+    ports:
+      - "3000:80"
 
 volumes:
   pgdata:

@@ -95,12 +95,31 @@ cd backend
 > Testcontainers 依赖 `DOCKER_HOST` 与 `TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE`（脚本已处理），
 > 并在 surefire 中设置 `api.version=1.44` 以兼容 Docker Engine 29。
 
-## 容器化（可选）
+## 容器化部署
 
-`docker-compose.yml` 提供 PostgreSQL + 后端的完整栈；若已使用宿主机 PG，可只构建后端镜像：
+`docker-compose.yml` 一次拉起 **PostgreSQL + 后端 + 前端（nginx）** 三个容器：
 
 ```bash
-docker compose up -d --build backend
+docker compose up -d --build
+```
+
+| 服务 | 容器 | 宿主机端口 | 说明 |
+|---|---|---|---|
+| 前端 | `edu-frontend` | **3000** | nginx 托管静态资源，并把 `/api` 反向代理到后端（同源，无 CORS） |
+| 后端 | `edu-backend` | **8180** | Spring Boot，容器内 8080 |
+| 数据库 | `edu-db` | **5433** | 避免与宿主机自带 PostgreSQL(5432) 冲突 |
+
+访问 **http://localhost:3000**；接口文档 http://localhost:8180/swagger-ui.html。
+首次启动会自动执行 Flyway 迁移并创建管理员 `admin / admin123`。
+
+> 前端只需静态托管的场景：`pnpm build` 后将 `frontend/dist` 交给任意静态服务器，
+> 并把 `/api` 反代到后端即可。`frontend/vite.config.ts` 支持 `VITE_API_TARGET` 覆盖开发代理目标。
+
+停止 / 清理：
+
+```bash
+docker compose down          # 停止
+docker compose down -v       # 停止并删除数据卷
 ```
 
 ## 主要接口

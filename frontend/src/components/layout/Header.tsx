@@ -41,6 +41,13 @@ export function Header() {
                   提问
                 </Link>
               </Button>
+              {user.role !== "ADMIN" && (
+                <Button variant="ghost" size="sm" asChild>
+                  <Link to="/professor/center">
+                    {user.role === "PROFESSOR" ? "教授中心" : "成为教授"}
+                  </Link>
+                </Button>
+              )}
               <Button variant="ghost" size="icon" asChild title="消息">
                 <Link to="/messages">
                   <MessageSquare />

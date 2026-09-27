@@ -1,6 +1,4 @@
 spring:
-  profiles:
-    active: prod
   datasource:
     url: jdbc:postgresql://db:5432/education
     username: ${DB_USER:education}
@@ -23,4 +21,4 @@ app:
       root: /app/data/files
       public-base-url: /api/files
   cors:
-    allowed-origins: ${CORS_ORIGINS:http://localhost:5173}
+    allowed-origins: ${CORS_ORIGINS:http://localhost:3000}

@@ -23,6 +23,12 @@ public class ProfessorController {
         return ApiResponse.ok(professorService.apply(CurrentUser.id(), request).getUserId());
     }
 
+    @GetMapping("/me")
+    @PreAuthorize("isAuthenticated()")
+    public ApiResponse<ProfessorSelfView> myProfile() {
+        return ApiResponse.ok(professorService.myProfile(CurrentUser.id()).orElse(null));
+    }
+
     @PutMapping("/me")
     @PreAuthorize("hasRole('PROFESSOR')")
     public ApiResponse<ProfessorSummary> updateMe(@Valid @RequestBody ProfessorRequests.UpdateRequest request) {
