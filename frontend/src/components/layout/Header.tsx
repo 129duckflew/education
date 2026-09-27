@@ -1,7 +1,12 @@
-import { Link } from "react-router-dom"
-import { BookOpen, GraduationCap, LogIn, MessageSquare, UserRound } from "lucide-react"
+import { useState } from "react"
+import { Link, useNavigate } from "react-router-dom"
+import { useQuery } from "@tanstack/react-query"
+import { BookOpen, GraduationCap, LogIn, MessageSquare, Search, UserRound } from "lucide-react"
+import { api } from "@/lib/api"
 import { useAuth } from "@/lib/auth"
+import { useNotificationStream } from "@/lib/useNotificationStream"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 
 const navItems = [
   { to: "/questions", label: "问答" },
@@ -13,26 +18,53 @@ const navItems = [
 
 export function Header() {
   const { user, logout } = useAuth()
+  const navigate = useNavigate()
+  const [keyword, setKeyword] = useState("")
+  useNotificationStream()
+
+  const unread = useQuery({
+    queryKey: ["notifications", "unread"],
+    queryFn: () => api.get<number>("/notifications/unread-count"),
+    enabled: !!user,
+    refetchInterval: 30_000,
+  })
 
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur">
-      <div className="mx-auto flex h-14 max-w-6xl items-center gap-6 px-4">
-        <Link to="/" className="flex items-center gap-2 font-semibold">
+      <div className="mx-auto flex h-14 max-w-6xl items-center gap-4 px-4">
+        <Link to="/" className="flex shrink-0 items-center gap-2 font-semibold">
           <GraduationCap className="size-5" />
           教授面对面
         </Link>
-        <nav className="hidden items-center gap-1 md:flex">
+        <nav className="hidden items-center gap-1 lg:flex">
           {navItems.map((item) => (
             <Link
               key={item.to}
               to={item.to}
-              className="rounded-md px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+              className="rounded-md px-2.5 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
             >
               {item.label}
             </Link>
           ))}
         </nav>
-        <div className="ml-auto flex items-center gap-2">
+
+        <form
+          className="relative ml-auto hidden max-w-xs flex-1 md:block"
+          onSubmit={(e) => {
+            e.preventDefault()
+            navigate(`/search?q=${encodeURIComponent(keyword)}`)
+          }}
+        >
+          <Search className="pointer-events-none absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            value={keyword}
+            onChange={(e) => setKeyword(e.target.value)}
+            placeholder="搜索"
+            className="pl-8"
+          />
+        </form>
+
+        <div className="flex items-center gap-2">
           {user ? (
             <>
               <Button variant="ghost" size="sm" asChild>
@@ -49,8 +81,13 @@ export function Header() {
                 </Button>
               )}
               <Button variant="ghost" size="icon" asChild title="消息">
-                <Link to="/messages">
+                <Link to="/messages" className="relative">
                   <MessageSquare />
+                  {(unread.data ?? 0) > 0 && (
+                    <span className="absolute -right-1 -top-1 flex size-4 items-center justify-center rounded-full bg-destructive text-[10px] text-destructive-foreground">
+                      {(unread.data ?? 0) > 99 ? "99+" : unread.data}
+                    </span>
+                  )}
                 </Link>
               </Button>
               <Button variant="ghost" size="sm" asChild>

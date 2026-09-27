@@ -35,8 +35,7 @@ public class GuideService {
     }
 
     @Transactional(readOnly = true)
-    public List<GuideDtos.GuideNode> recommendByAreas(Collection<Long> areaIds) {
-        Set<Long> subtree = consultAreaService.subtreeIds(areaIds);
+    public List<GuideDtos.GuideNode> recommendByAreas(Collection<Long> areaIds) {        Set<Long> subtree = consultAreaService.subtreeIds(areaIds);
         if (subtree.isEmpty()) {
             return List.of();
         }
@@ -57,6 +56,17 @@ public class GuideService {
             }
         }
         return buildTree(all.stream().filter(g -> keep.contains(g.getId())).toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<GuideDtos.GuideNode> search(String keyword) {
+        if (keyword == null || keyword.isBlank()) {
+            return List.of();
+        }
+        return guideRepository.findByNameContainingIgnoreCaseOrderByIdAsc(keyword.trim()).stream()
+                .map(g -> new GuideDtos.GuideNode(g.getId(), g.getName(), g.getParentId(),
+                        g.isImportant(), g.getSortOrder(), List.of()))
+                .toList();
     }
 
     @Transactional

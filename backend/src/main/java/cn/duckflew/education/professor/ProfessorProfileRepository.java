@@ -18,20 +18,22 @@ public interface ProfessorProfileRepository extends JpaRepository<ProfessorProfi
     Page<ProfessorProfile> findByApprovedTrueAndJobRankId(Long jobRankId, Pageable pageable);
 
     /**
-     * 基于 pg_trgm 的教授模糊检索（姓名 / 简介）。
+     * 基于 pg_trgm 的教授检索：ILIKE 子串匹配，similarity 仅用于排序。
      */
     @Query(value = """
             select p.* from professor_profile p
             join app_user u on u.id = p.user_id
             where p.approved = true
-              and (coalesce(u.real_name, '') % :kw or coalesce(p.introduction, '') % :kw)
+              and (coalesce(u.real_name, '') ilike '%' || :kw || '%'
+                   or coalesce(p.introduction, '') ilike '%' || :kw || '%')
             order by similarity(coalesce(u.real_name, ''), :kw) desc
             """,
             countQuery = """
             select count(*) from professor_profile p
             join app_user u on u.id = p.user_id
             where p.approved = true
-              and (coalesce(u.real_name, '') % :kw or coalesce(p.introduction, '') % :kw)
+              and (coalesce(u.real_name, '') ilike '%' || :kw || '%'
+                   or coalesce(p.introduction, '') ilike '%' || :kw || '%')
             """,
             nativeQuery = true)
     Page<ProfessorProfile> search(@Param("kw") String keyword, Pageable pageable);

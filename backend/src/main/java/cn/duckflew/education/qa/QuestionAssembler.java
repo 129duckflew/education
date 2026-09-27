@@ -3,6 +3,8 @@ package cn.duckflew.education.qa;
 import cn.duckflew.education.qa.dto.AnswerView;
 import cn.duckflew.education.qa.dto.QuestionCard;
 import cn.duckflew.education.qa.dto.QuestionDetail;
+import cn.duckflew.education.comment.CommentRepository;
+import cn.duckflew.education.comment.CommentTargetType;
 import cn.duckflew.education.taxonomy.ConsultArea;
 import cn.duckflew.education.taxonomy.ConsultAreaRepository;
 import cn.duckflew.education.user.User;
@@ -27,6 +29,7 @@ public class QuestionAssembler {
     private final AnswerCollectRepository answerCollectRepository;
     private final ConsultAreaRepository consultAreaRepository;
     private final UserRepository userRepository;
+    private final CommentRepository commentRepository;
 
     public QuestionAssembler(QuestionAreaRepository questionAreaRepository,
                              QuestionImageRepository questionImageRepository,
@@ -35,7 +38,8 @@ public class QuestionAssembler {
                              AnswerLikeRepository answerLikeRepository,
                              AnswerCollectRepository answerCollectRepository,
                              ConsultAreaRepository consultAreaRepository,
-                             UserRepository userRepository) {
+                             UserRepository userRepository,
+                             CommentRepository commentRepository) {
         this.questionAreaRepository = questionAreaRepository;
         this.questionImageRepository = questionImageRepository;
         this.questionLikeRepository = questionLikeRepository;
@@ -44,6 +48,7 @@ public class QuestionAssembler {
         this.answerCollectRepository = answerCollectRepository;
         this.consultAreaRepository = consultAreaRepository;
         this.userRepository = userRepository;
+        this.commentRepository = commentRepository;
     }
 
     public List<QuestionCard> toCards(List<Question> questions, Long viewerId) {
@@ -65,6 +70,8 @@ public class QuestionAssembler {
 
         Map<Long, Long> likeCounts = toCountMap(questionLikeRepository.countByQuestionIds(questionIds));
         Map<Long, Long> answerCounts = toCountMap(answerRepository.countByQuestionIds(questionIds));
+        Map<Long, Long> commentCounts = toCountMap(
+                commentRepository.countByTargetIds(CommentTargetType.QUESTION, questionIds));
 
         Set<Long> likedByViewer = viewerId == null ? Set.of()
                 : questionLikeRepository.findByUserIdAndQuestionIdIn(viewerId, questionIds).stream()
@@ -84,6 +91,7 @@ public class QuestionAssembler {
                     imagesByQuestion.getOrDefault(q.getId(), List.of()),
                     likeCounts.getOrDefault(q.getId(), 0L),
                     answerCounts.getOrDefault(q.getId(), 0L),
+                    commentCounts.getOrDefault(q.getId(), 0L),
                     likedByViewer.contains(q.getId()),
                     q.getCreatedAt());
         }).toList();
@@ -102,6 +110,8 @@ public class QuestionAssembler {
         List<Long> answerIds = answers.stream().map(Answer::getId).toList();
         Map<Long, Long> likeCounts = toCountMap(answerLikeRepository.countByAnswerIds(answerIds));
         Map<Long, Long> collectCounts = toCountMap(answerCollectRepository.countByAnswerIds(answerIds));
+        Map<Long, Long> commentCounts = toCountMap(
+                commentRepository.countByTargetIds(CommentTargetType.ANSWER, answerIds));
 
         Set<Long> liked = viewerId == null ? Set.of()
                 : answerLikeRepository.findByUserIdAndAnswerIdIn(viewerId, answerIds).stream()
@@ -119,6 +129,7 @@ public class QuestionAssembler {
                 a.getContent(),
                 likeCounts.getOrDefault(a.getId(), 0L),
                 collectCounts.getOrDefault(a.getId(), 0L),
+                commentCounts.getOrDefault(a.getId(), 0L),
                 liked.contains(a.getId()),
                 collected.contains(a.getId()),
                 a.getCreatedAt())).toList();

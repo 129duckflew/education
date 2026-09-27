@@ -51,6 +51,11 @@ public class QuestionController {
                 PageRequest.of(page, size))));
     }
 
+    @GetMapping("/liked")
+    public ApiResponse<List<QuestionCard>> liked() {
+        return ApiResponse.ok(questionService.listLiked(CurrentUser.id()));
+    }
+
     @GetMapping("/recommend")
     public ApiResponse<PageResponse<QuestionCard>> recommend(@RequestParam(defaultValue = "0") int page,
                                                              @RequestParam(defaultValue = "10") int size) {

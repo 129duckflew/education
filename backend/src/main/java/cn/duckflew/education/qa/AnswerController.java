@@ -36,6 +36,11 @@ public class AnswerController {
         return ApiResponse.ok(answerService.listCollected(CurrentUser.id()));
     }
 
+    @GetMapping("/liked")
+    public ApiResponse<List<AnswerView>> liked() {
+        return ApiResponse.ok(answerService.listLiked(CurrentUser.id()));
+    }
+
     @PostMapping("/{id}/like")
     public ApiResponse<Void> like(@PathVariable Long id) {
         answerService.like(CurrentUser.id(), id);

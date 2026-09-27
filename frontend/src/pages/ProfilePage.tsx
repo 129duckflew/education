@@ -1,7 +1,8 @@
 import { useEffect, useState, type FormEvent } from "react"
+import { Link } from "react-router-dom"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { api, type PageResponse } from "@/lib/api"
-import type { ConsultArea, PayOrder, QuestionCard, UserProfile } from "@/lib/types"
+import type { AnswerView, ConsultArea, PayOrder, QuestionCard, UserProfile } from "@/lib/types"
 import { useAuth } from "@/lib/auth"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -11,7 +12,7 @@ import { Label } from "@/components/ui/label"
 import { LoadingState } from "@/components/ui/spinner"
 import { cn } from "@/lib/utils"
 
-type Tab = "profile" | "interests" | "questions" | "orders"
+type Tab = "profile" | "interests" | "questions" | "orders" | "liked"
 
 export function ProfilePage() {
   const { user, refreshUser } = useAuth()
@@ -27,6 +28,7 @@ export function ProfilePage() {
             ["profile", "基本资料"],
             ["interests", "关注领域"],
             ["questions", "我的提问"],
+            ["liked", "我的点赞"],
             ["orders", "我的订单"],
           ] as [Tab, string][]
         ).map(([key, label]) => (
@@ -44,6 +46,7 @@ export function ProfilePage() {
       {tab === "profile" && <ProfileForm user={user} onSaved={refreshUser} />}
       {tab === "interests" && <Interests />}
       {tab === "questions" && <MyQuestions />}
+      {tab === "liked" && <MyLikes />}
       {tab === "orders" && <MyOrders />}
     </div>
   )
@@ -162,8 +165,55 @@ function Interests() {
   )
 }
 
-function MyQuestions() {
-  const query = useQuery({
+function MyLikes() {
+  const questions = useQuery({
+    queryKey: ["liked", "questions"],
+    queryFn: () => api.get<QuestionCard[]>("/questions/liked"),
+  })
+  const answers = useQuery({
+    queryKey: ["liked", "answers"],
+    queryFn: () => api.get<AnswerView[]>("/answers/liked"),
+  })
+
+  return (
+    <div className="space-y-6">
+      <div className="space-y-3">
+        <h3 className="text-sm font-semibold">点赞的问题（{questions.data?.length ?? 0}）</h3>
+        {questions.data?.length ? (
+          questions.data.map((q) => (
+            <Card key={q.id}>
+              <CardContent className="p-4">
+                <Link to={`/questions/${q.id}`} className="text-sm font-medium hover:text-primary">
+                  {q.title}
+                </Link>
+              </CardContent>
+            </Card>
+          ))
+        ) : (
+          <p className="text-sm text-muted-foreground">暂无</p>
+        )}
+      </div>
+
+      <div className="space-y-3">
+        <h3 className="text-sm font-semibold">点赞的回答（{answers.data?.length ?? 0}）</h3>
+        {answers.data?.length ? (
+          answers.data.map((a) => (
+            <Card key={a.id}>
+              <CardContent className="p-4">
+                <p className="text-sm font-medium">{a.professorName}</p>
+                <p className="line-clamp-2 text-sm text-muted-foreground">{a.content}</p>
+              </CardContent>
+            </Card>
+          ))
+        ) : (
+          <p className="text-sm text-muted-foreground">暂无</p>
+        )}
+      </div>
+    </div>
+  )
+}
+
+function MyQuestions() {  const query = useQuery({
     queryKey: ["my-questions"],
     queryFn: () => api.get<PageResponse<QuestionCard>>("/questions/mine?size=20"),
   })

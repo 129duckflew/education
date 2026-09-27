@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Textarea } from "@/components/ui/textarea"
 import { LoadingState } from "@/components/ui/spinner"
+import { CommentSection } from "@/components/common/CommentSection"
 import { cn } from "@/lib/utils"
 
 export function QuestionDetailPage() {
@@ -72,6 +73,12 @@ export function QuestionDetailPage() {
         </CardContent>
       </Card>
 
+      <Card>
+        <CardContent className="p-5">
+          <CommentSection targetType="QUESTION" targetId={questionId} title="问题评论" />
+        </CardContent>
+      </Card>
+
       <div className="space-y-3">
         <h2 className="flex items-center gap-2 text-lg font-semibold">
           <MessageSquare className="size-4" />
@@ -101,6 +108,7 @@ function AnswerItem({
   onChanged: () => void
   canInteract: boolean
 }) {
+  const [showComments, setShowComments] = useState(false)
   const like = useMutation({
     mutationFn: () =>
       answer.liked ? api.del(`/answers/${answer.id}/like`) : api.post(`/answers/${answer.id}/like`),
@@ -145,7 +153,16 @@ function AnswerItem({
             <Star className={cn(answer.collected && "fill-current")} />
             收藏 {answer.collectCount}
           </Button>
+          <Button variant="ghost" size="sm" onClick={() => setShowComments((v) => !v)}>
+            <MessageSquare />
+            评论 {answer.commentCount}
+          </Button>
         </div>
+        {showComments && (
+          <div className="border-t border-border pt-4">
+            <CommentSection targetType="ANSWER" targetId={answer.id} title="回答评论" />
+          </div>
+        )}
       </CardContent>
     </Card>
   )

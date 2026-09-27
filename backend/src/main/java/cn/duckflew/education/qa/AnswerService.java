@@ -79,6 +79,16 @@ public class AnswerService {
         return assembler.toAnswerViews(answerRepository.findAllById(answerIds), userId);
     }
 
+    @Transactional(readOnly = true)
+    public List<AnswerView> listLiked(Long userId) {
+        List<Long> answerIds = answerLikeRepository.findByUserId(userId).stream()
+                .map(AnswerLike::getAnswerId).toList();
+        if (answerIds.isEmpty()) {
+            return List.of();
+        }
+        return assembler.toAnswerViews(answerRepository.findAllById(answerIds), userId);
+    }
+
     @Transactional
     public void like(Long userId, Long answerId) {
         Answer answer = getRequired(answerId);

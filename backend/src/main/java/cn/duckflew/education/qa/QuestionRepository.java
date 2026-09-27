@@ -32,18 +32,20 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
                                    Pageable pageable);
 
     /**
-     * 基于 pg_trgm 的模糊检索，按标题相似度排序。
+     * 基于 pg_trgm 的检索：ILIKE 子串匹配（GIN trigram 索引加速），similarity 仅用于排序。
      */
     @Query(value = """
             select * from question q
             where q.status = 'NORMAL'
-              and (q.title % :kw or coalesce(q.description, '') % :kw)
+              and (q.title ilike '%' || :kw || '%'
+                   or coalesce(q.description, '') ilike '%' || :kw || '%')
             order by similarity(q.title, :kw) desc, q.created_at desc
             """,
             countQuery = """
             select count(*) from question q
             where q.status = 'NORMAL'
-              and (q.title % :kw or coalesce(q.description, '') % :kw)
+              and (q.title ilike '%' || :kw || '%'
+                   or coalesce(q.description, '') ilike '%' || :kw || '%')
             """,
             nativeQuery = true)
     Page<Question> searchNormal(@Param("kw") String keyword, Pageable pageable);

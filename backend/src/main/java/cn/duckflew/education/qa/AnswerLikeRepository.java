@@ -15,6 +15,8 @@ public interface AnswerLikeRepository extends JpaRepository<AnswerLike, Long> {
 
     List<AnswerLike> findByAnswerIdIn(Collection<Long> answerIds);
 
+    List<AnswerLike> findByUserId(Long userId);
+
     List<AnswerLike> findByUserIdAndAnswerIdIn(Long userId, Collection<Long> answerIds);
 
     void deleteByUserIdAndAnswerId(Long userId, Long answerId);

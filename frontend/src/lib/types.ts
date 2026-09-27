@@ -46,6 +46,7 @@ export interface QuestionCard {
   imageFileIds: number[]
   likeCount: number
   answerCount: number
+  commentCount: number
   liked: boolean
   createdAt: string
 }
@@ -57,6 +58,7 @@ export interface AnswerView {
   content: string
   likeCount: number
   collectCount: number
+  commentCount: number
   liked: boolean
   collected: boolean
   createdAt: string
@@ -229,4 +231,28 @@ export interface ProfessorSelfView {
   cvFileId: number | null
   areaIds: number[]
   educations: EducationView[]
+}
+
+export type CommentTargetType = "QUESTION" | "ANSWER"
+
+export interface CommentView {
+  id: number
+  targetType: CommentTargetType
+  targetId: number
+  userId: number
+  userName: string
+  userAvatar: string | null
+  content: string
+  parentId: number | null
+  createdAt: string
+  replies: CommentView[]
+}
+
+export interface SearchResult {
+  keyword: string
+  questions: QuestionCard[]
+  professors: ProfessorSummary[]
+  news: NewsView[]
+  resources: ResourceView[]
+  guides: GuideNode[]
 }

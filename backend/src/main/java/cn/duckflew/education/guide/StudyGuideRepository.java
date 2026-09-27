@@ -9,5 +9,7 @@ public interface StudyGuideRepository extends JpaRepository<StudyGuide, Long> {
 
     List<StudyGuide> findByParentIdOrderBySortOrderAsc(Long parentId);
 
+    List<StudyGuide> findByNameContainingIgnoreCaseOrderByIdAsc(String name);
+
     void deleteByParentId(Long parentId);
 }

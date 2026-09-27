@@ -153,8 +153,12 @@ docker compose down -v       # 停止并删除数据卷
 - 用户：`GET/PUT /api/users/me`、`/api/users/me/interest-areas`
 - 问答：`GET /api/public/questions`、`GET /api/questions/{id}`、`POST /api/questions[/paid]`、
   `POST /api/answers`、点赞/收藏 `POST|DELETE /api/{questions,answers}/{id}/like`
+- 支持列表：`GET /api/questions/{mine,liked,recommend}`、`GET /api/answers/{collected,liked}`
+- **评论**：`GET /api/comments?targetType={QUESTION|ANSWER}&targetId=`、`POST /api/comments`（支持 `parentId` 回复）、`DELETE /api/comments/{id}`
 - 教授：`GET /api/professors`、`GET /api/professors/{id}`、`POST /api/professors/apply`
-- 搜索：`GET /api/public/search/{questions,professors}?keyword=`
+- **全站搜索**：`GET /api/public/search?keyword=&limit=`（聚合问答/教授/资讯/资料/指南）
+- **通知**：`GET /api/notifications`、`/unread-count`、`/unread-by-type`、`POST /{id}/read`、`POST /read-all`、
+  实时推送 `GET /api/notifications/stream?token=`（SseEmitter，替代旧 WebSocket）
 - 后台：`/api/admin/{questions,users,professors,areas,taxonomy,study-guides,news}`（需 `*:manage` 权限）
 
 ## 设计说明

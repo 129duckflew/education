@@ -2,11 +2,16 @@ package cn.duckflew.education.messaging;
 
 import cn.duckflew.education.common.api.ApiResponse;
 import cn.duckflew.education.common.api.PageResponse;
+import cn.duckflew.education.common.exception.BusinessException;
+import cn.duckflew.education.common.exception.ErrorCode;
 import cn.duckflew.education.security.CurrentUser;
+import cn.duckflew.education.security.JwtService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.util.List;
 import java.util.Map;
@@ -16,9 +21,29 @@ import java.util.Map;
 public class MessageController {
 
     private final MessageService messageService;
+    private final JwtService jwtService;
+    private final SseEmitterRegistry sseEmitterRegistry;
 
-    public MessageController(MessageService messageService) {
+    public MessageController(MessageService messageService,
+                             JwtService jwtService,
+                             SseEmitterRegistry sseEmitterRegistry) {
         this.messageService = messageService;
+        this.jwtService = jwtService;
+        this.sseEmitterRegistry = sseEmitterRegistry;
+    }
+
+    /**
+     * 通知实时推送（SSE）。EventSource 无法自定义请求头，故用 query 参数传 token。
+     */
+    @GetMapping(value = "/notifications/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public SseEmitter stream(@RequestParam("token") String token) {
+        Long userId;
+        try {
+            userId = jwtService.userIdFromAccessToken(token);
+        } catch (RuntimeException ex) {
+            throw new BusinessException(ErrorCode.UNAUTHORIZED);
+        }
+        return sseEmitterRegistry.register(userId);
     }
 
     @GetMapping("/notifications")

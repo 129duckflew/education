@@ -17,6 +17,7 @@ public record QuestionCard(
         List<Long> imageFileIds,
         long likeCount,
         long answerCount,
+        long commentCount,
         boolean liked,
         Instant createdAt
 ) {

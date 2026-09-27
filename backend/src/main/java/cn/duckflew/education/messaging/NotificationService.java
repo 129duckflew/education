@@ -7,9 +7,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class NotificationService {
 
     private final NotificationRepository repository;
+    private final SseEmitterRegistry sseEmitterRegistry;
 
-    public NotificationService(NotificationRepository repository) {
+    public NotificationService(NotificationRepository repository, SseEmitterRegistry sseEmitterRegistry) {
         this.repository = repository;
+        this.sseEmitterRegistry = sseEmitterRegistry;
     }
 
     @Transactional
@@ -18,6 +20,10 @@ public class NotificationService {
         if (toUserId == null || toUserId.equals(fromUserId)) {
             return;
         }
-        repository.save(Notification.of(toUserId, fromUserId, type, resourceId, relatedUserId));
+        Notification saved = repository.save(
+                Notification.of(toUserId, fromUserId, type, resourceId, relatedUserId));
+        sseEmitterRegistry.publish(toUserId, "notification",
+                new MessageDtos.NotificationView(saved.getId(), saved.getFromUserId(), saved.getType(),
+                        saved.getResourceId(), saved.getRelatedUserId(), saved.isRead(), saved.getCreatedAt()));
     }
 }

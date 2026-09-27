@@ -14,6 +14,7 @@ import { NewsPage } from "@/pages/NewsPage"
 import { NewsDetailPage } from "@/pages/NewsDetailPage"
 import { GuidesPage } from "@/pages/GuidesPage"
 import { ResourcesPage } from "@/pages/ResourcesPage"
+import { SearchPage } from "@/pages/SearchPage"
 import { MessagesPage } from "@/pages/MessagesPage"
 import { ProfilePage } from "@/pages/ProfilePage"
 import { NotFoundPage } from "@/pages/NotFoundPage"
@@ -58,6 +59,7 @@ export function App() {
         <Route path="news/:id" element={<NewsDetailPage />} />
         <Route path="guides" element={<GuidesPage />} />
         <Route path="resources" element={<ResourcesPage />} />
+        <Route path="search" element={<SearchPage />} />
         <Route
           path="messages"
           element={

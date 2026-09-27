@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { api, type PageResponse } from "@/lib/api"
 import type { ConversationView, MessageView, NotificationView } from "@/lib/types"
@@ -50,6 +51,7 @@ export function MessagesPage() {
 
 function Notifications() {
   const queryClient = useQueryClient()
+  const navigate = useNavigate()
   const query = useQuery({
     queryKey: ["notifications"],
     queryFn: () => api.get<PageResponse<NotificationView>>("/notifications?size=30"),
@@ -58,8 +60,18 @@ function Notifications() {
     mutationFn: () => api.post("/notifications/read-all"),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["notifications"] }),
   })
+  const markRead = useMutation({
+    mutationFn: (id: number) => api.post(`/notifications/${id}/read`),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["notifications"] }),
+  })
 
   if (query.isLoading) return <LoadingState />
+
+  function handleClick(n: NotificationView) {
+    if (!n.read) markRead.mutate(n.id)
+    const link = notificationLink(n.type, n.resourceId)
+    if (link) navigate(link)
+  }
 
   return (
     <div className="space-y-3">
@@ -70,8 +82,15 @@ function Notifications() {
       </div>
       {query.data?.list.length ? (
         query.data.list.map((n) => (
-          <Card key={n.id} className={n.read ? "" : "border-primary/40 bg-primary/5"}>
-            <CardContent className="flex items-center justify-between p-4 text-sm">
+          <Card
+            key={n.id}
+            className={n.read ? "" : "border-primary/40 bg-primary/5"}
+            role="button"
+            tabIndex={0}
+            onClick={() => handleClick(n)}
+            onKeyDown={(e) => e.key === "Enter" && handleClick(n)}
+          >
+            <CardContent className="flex cursor-pointer items-center justify-between p-4 text-sm">
               <span>{typeLabels[n.type] ?? n.type}</span>
               <span className="flex items-center gap-3 text-xs text-muted-foreground">
                 {!n.read && <Badge>新</Badge>}
@@ -85,6 +104,17 @@ function Notifications() {
       )}
     </div>
   )
+}
+
+function notificationLink(type: string, resourceId: number | null): string | null {
+  if (resourceId == null) return null
+  if (type.startsWith("QUESTION_") || type === "COMMENT_ON_QUESTION") {
+    return `/questions/${resourceId}`
+  }
+  if (type.startsWith("PROFESSOR_")) {
+    return "/professor/center"
+  }
+  return null
 }
 
 function Conversations() {

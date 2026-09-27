@@ -9,6 +9,7 @@ public record AnswerView(
         String content,
         long likeCount,
         long collectCount,
+        long commentCount,
         boolean liked,
         boolean collected,
         Instant createdAt

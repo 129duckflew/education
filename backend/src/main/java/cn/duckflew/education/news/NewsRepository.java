@@ -12,4 +12,6 @@ public interface NewsRepository extends JpaRepository<News, Long> {
     List<News> findByIndexShowTrueOrderByPriorityDescCreatedAtDesc(Pageable pageable);
 
     List<News> findByIdNot(Long id, Pageable pageable);
+
+    Page<News> findByTitleContainingIgnoreCaseOrderByCreatedAtDesc(String title, Pageable pageable);
 }

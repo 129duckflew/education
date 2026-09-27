@@ -129,6 +129,18 @@ class QaFlowIntegrationTest extends AbstractIntegrationTest {
         mockMvc.perform(get("/api/questions/" + questionId)
                         .header("Authorization", "Bearer " + authorToken))
                 .andExpect(jsonPath("$.data.question.likeCount").value(1));
+
+        // 我的点赞列表
+        mockMvc.perform(get("/api/questions/liked")
+                        .header("Authorization", "Bearer " + authorToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.length()").value(1))
+                .andExpect(jsonPath("$.data[0].id").value(questionId));
+        mockMvc.perform(get("/api/answers/liked")
+                        .header("Authorization", "Bearer " + authorToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.length()").value(1))
+                .andExpect(jsonPath("$.data[0].id").value(answerId));
     }
 
     @Test

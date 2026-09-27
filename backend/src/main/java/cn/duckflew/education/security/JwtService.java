@@ -73,6 +73,19 @@ public class JwtService {
         return properties.accessTokenTtl().toSeconds();
     }
 
+    /**
+     * 从 access token 解析用户 id，供 SSE 等无法设置请求头的场景使用。
+     *
+     * @throws JwtException token 非法或类型不匹配
+     */
+    public Long userIdFromAccessToken(String token) {
+        Jwt jwt = decode(token);
+        if (!TYPE_ACCESS.equals(jwt.getClaimAsString("typ"))) {
+            throw new JwtException("不是 access token");
+        }
+        return Long.valueOf(jwt.getSubject());
+    }
+
     private String encode(JwtClaimsSet claims) {
         JwsHeader header = JwsHeader.with(MacAlgorithm.HS256).build();
         return encoder.encode(JwtEncoderParameters.from(header, claims)).getTokenValue();

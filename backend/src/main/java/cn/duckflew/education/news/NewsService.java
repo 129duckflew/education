@@ -47,6 +47,16 @@ public class NewsService {
         return toViews(newsRepository.findByIdNot(id, PageRequest.of(0, limit)));
     }
 
+    @Transactional(readOnly = true)
+    public Page<NewsDtos.NewsView> search(String keyword, Pageable pageable) {
+        if (keyword == null || keyword.isBlank()) {
+            return Page.empty(pageable);
+        }
+        Page<News> page = newsRepository
+                .findByTitleContainingIgnoreCaseOrderByCreatedAtDesc(keyword.trim(), pageable);
+        return new PageImpl<>(toViews(page.getContent()), page.getPageable(), page.getTotalElements());
+    }
+
     @Transactional
     public NewsDtos.NewsView save(Long id, Long authorId, NewsDtos.SaveRequest request) {
         News news = id == null ? new News() : newsRepository.findById(id)

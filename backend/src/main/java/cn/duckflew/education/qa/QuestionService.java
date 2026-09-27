@@ -125,6 +125,16 @@ public class QuestionService {
     }
 
     @Transactional(readOnly = true)
+    public List<QuestionCard> listLiked(Long userId) {
+        List<Long> ids = questionLikeRepository.findByUserId(userId).stream()
+                .map(QuestionLike::getQuestionId).toList();
+        if (ids.isEmpty()) {
+            return List.of();
+        }
+        return assembler.toCards(questionRepository.findAllById(ids), userId);
+    }
+
+    @Transactional(readOnly = true)
     public Page<QuestionCard> recommendByAreas(Collection<Long> areaIds, Long viewerId, Pageable pageable) {
         Set<Long> subtree = consultAreaService.subtreeIds(areaIds);
         if (subtree.isEmpty()) {

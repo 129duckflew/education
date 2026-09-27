@@ -22,10 +22,21 @@ public class SearchController {
 
     private final QuestionService questionService;
     private final ProfessorService professorService;
+    private final SearchService searchService;
 
-    public SearchController(QuestionService questionService, ProfessorService professorService) {
+    public SearchController(QuestionService questionService,
+                            ProfessorService professorService,
+                            SearchService searchService) {
         this.questionService = questionService;
         this.professorService = professorService;
+        this.searchService = searchService;
+    }
+
+    /** 全站聚合搜索。 */
+    @GetMapping
+    public ApiResponse<SearchResult> all(@RequestParam String keyword,
+                                         @RequestParam(defaultValue = "5") int limit) {
+        return ApiResponse.ok(searchService.search(keyword, Math.min(Math.max(limit, 1), 20)));
     }
 
     @GetMapping("/questions")
@@ -42,7 +53,8 @@ public class SearchController {
             @RequestParam String keyword,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "12") int size) {
-        var pageable = PageRequest.of(page, size, Sort.by("userId"));
+        // 使用原生 pg_trgm 查询，不能追加 Sort（会破坏 SQL）
+        var pageable = PageRequest.of(page, size);
         return ApiResponse.ok(PageResponse.of(professorService.search(keyword, pageable)));
     }
 }

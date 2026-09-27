@@ -45,10 +45,12 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/public/**").permitAll()
+                        .requestMatchers("/api/notifications/stream").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/files/**").permitAll()
                         .requestMatchers(HttpMethod.GET,
                                 "/api/questions/**",
                                 "/api/answers/question/**",
+                                "/api/comments/**",
                                 "/api/professors/**",
                                 "/api/news/**",
                                 "/api/study-guides/**",
