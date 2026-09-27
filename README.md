@@ -95,6 +95,31 @@ cd backend
 > Testcontainers 依赖 `DOCKER_HOST` 与 `TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE`（脚本已处理），
 > 并在 surefire 中设置 `api.version=1.44` 以兼容 Docker Engine 29。
 
+## 初期数据
+
+Flyway 迁移按顺序构建初期数据：
+
+| 迁移 | 内容 |
+|---|---|
+| `V1__schema.sql` | 全量 schema |
+| `V2__reference_data.sql` | 职称/学位字典、后台角色权限 |
+| `V3__reference_data.sql` | **从旧系统 `sql/edu.sql` 抽取转换**：2631 所学校、456 条专业目录、149 个咨询领域（点号 id 转 `parent_id`） |
+| `V4__demo_content.sql` | 原创演示内容：5 个演示账号、教授资料/教育经历/可答领域、10 条问答、3 条资讯、学习指南树 |
+| `V5__demo_interests.sql` | 演示学生的关注领域（用于验证推荐） |
+
+**演示账号**（密码均为 `password123`；管理员由应用启动时创建 `admin / admin123`）：
+
+| 账号 | 角色 | 领域 |
+|---|---|---|
+| `student@example.com` | 学生 | 关注：计算机类、出国留学 |
+| `prof@example.com` | 教授（张伟） | 计算机类、软件工程 |
+| `prof2@example.com` | 副教授（李娜） | 电子信息类、通信工程 |
+| `prof3@example.com` | 教授（王强） | 自动化类 |
+| `prof4@example.com` | 讲师（陈静） | 数学类 |
+
+> 说明：旧系统的问答数据为测试内容（`test`/`1111` 等）不可复用；参考数据则质量较高，已全部迁移。
+> 演示问答为**原创撰写**（仅以公开考研/留学科普文章作为选题参考），未抓取或转载第三方内容。
+
 ## 容器化部署
 
 `docker-compose.yml` 一次拉起 **PostgreSQL + 后端 + 前端（nginx）** 三个容器：

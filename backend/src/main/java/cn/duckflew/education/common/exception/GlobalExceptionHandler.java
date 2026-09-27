@@ -11,6 +11,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.stream.Collectors;
 
@@ -45,6 +46,12 @@ public class GlobalExceptionHandler {
         log.warn("数据完整性冲突: {}", ex.getMostSpecificCause().getMessage());
         return ResponseEntity.status(ErrorCode.BAD_REQUEST.httpStatus())
                 .body(ApiResponse.error(ErrorCode.BAD_REQUEST.code(), "数据冲突，请检查输入"));
+    }
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<ApiResponse<Void>> handleNoResource(NoResourceFoundException ex) {
+        return ResponseEntity.status(ErrorCode.NOT_FOUND.httpStatus())
+                .body(ApiResponse.error(ErrorCode.NOT_FOUND.code(), "接口不存在"));
     }
 
     @ExceptionHandler(AccessDeniedException.class)
