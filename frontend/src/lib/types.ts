@@ -143,21 +143,40 @@ export interface NotificationView {
   createdAt: string
 }
 
+export type MessageType = "TEXT" | "IMAGE" | "FILE" | "SYSTEM"
+export type MessageStatus = "NORMAL" | "RECALLED"
+
 export interface MessageView {
   id: number
-  fromUserId: number
-  toUserId: number
-  content: string
-  read: boolean
+  conversationId: number
+  senderId: number
+  senderName: string
+  type: MessageType
+  content: string | null
+  file: FileInfo | null
+  replyToId: number | null
+  clientMsgId: string | null
+  status: MessageStatus
   createdAt: string
 }
 
+export interface MessagePage {
+  list: MessageView[]
+  hasMore: boolean
+}
+
 export interface ConversationView {
-  peerId: number
+  id: number
+  type: "SINGLE" | "GROUP"
+  peerId: number | null
   peerName: string
+  title: string | null
   lastMessage: string | null
+  lastMessageType: MessageType | null
   lastAt: string | null
   unread: number
+  pinned: boolean
+  muted: boolean
 }
 
 export interface PayOrder {

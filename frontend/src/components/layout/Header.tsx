@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query"
 import { BookOpen, GraduationCap, LogIn, MessageSquare, Search, UserRound } from "lucide-react"
 import { api } from "@/lib/api"
 import { useAuth } from "@/lib/auth"
-import { useNotificationStream } from "@/lib/useNotificationStream"
+import { useRealtimeStream } from "@/lib/useRealtimeStream"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 
@@ -20,7 +20,7 @@ export function Header() {
   const { user, logout } = useAuth()
   const navigate = useNavigate()
   const [keyword, setKeyword] = useState("")
-  useNotificationStream()
+  useRealtimeStream()
 
   const unread = useQuery({
     queryKey: ["notifications", "unread"],
@@ -28,6 +28,13 @@ export function Header() {
     enabled: !!user,
     refetchInterval: 30_000,
   })
+  const unreadMessages = useQuery({
+    queryKey: ["conversations", "unread"],
+    queryFn: () => api.get<number>("/conversations/unread-count"),
+    enabled: !!user,
+    refetchInterval: 30_000,
+  })
+  const badge = (unread.data ?? 0) + (unreadMessages.data ?? 0)
 
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur">
@@ -83,9 +90,9 @@ export function Header() {
               <Button variant="ghost" size="icon" asChild title="消息">
                 <Link to="/messages" className="relative">
                   <MessageSquare />
-                  {(unread.data ?? 0) > 0 && (
+                  {badge > 0 && (
                     <span className="absolute -right-1 -top-1 flex size-4 items-center justify-center rounded-full bg-destructive text-[10px] text-destructive-foreground">
-                      {(unread.data ?? 0) > 99 ? "99+" : unread.data}
+                      {badge > 99 ? "99+" : badge}
                     </span>
                   )}
                 </Link>

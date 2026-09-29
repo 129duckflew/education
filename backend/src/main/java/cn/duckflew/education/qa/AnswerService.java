@@ -2,6 +2,7 @@ package cn.duckflew.education.qa;
 
 import cn.duckflew.education.common.exception.BusinessException;
 import cn.duckflew.education.common.exception.ErrorCode;
+import cn.duckflew.education.interaction.InteractionService;
 import cn.duckflew.education.messaging.NotificationService;
 import cn.duckflew.education.messaging.NotificationType;
 import cn.duckflew.education.qa.dto.AnswerRequest;
@@ -20,19 +21,22 @@ public class AnswerService {
     private final AnswerCollectRepository answerCollectRepository;
     private final NotificationService notificationService;
     private final QuestionAssembler assembler;
+    private final InteractionService interactionService;
 
     public AnswerService(AnswerRepository answerRepository,
                          QuestionRepository questionRepository,
                          AnswerLikeRepository answerLikeRepository,
                          AnswerCollectRepository answerCollectRepository,
                          NotificationService notificationService,
-                         QuestionAssembler assembler) {
+                         QuestionAssembler assembler,
+                         InteractionService interactionService) {
         this.answerRepository = answerRepository;
         this.questionRepository = questionRepository;
         this.answerLikeRepository = answerLikeRepository;
         this.answerCollectRepository = answerCollectRepository;
         this.notificationService = notificationService;
         this.assembler = assembler;
+        this.interactionService = interactionService;
     }
 
     /**
@@ -60,6 +64,8 @@ public class AnswerService {
         answerRepository.save(answer);
         notificationService.notify(question.getAuthorId(), professorId,
                 NotificationType.ANSWER_RECEIVED, answer.getId(), professorId);
+        // 建立互动关系，解锁双方私信
+        interactionService.record(question.getAuthorId(), professorId);
         return answer;
     }
 

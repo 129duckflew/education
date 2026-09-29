@@ -157,8 +157,12 @@ docker compose down -v       # 停止并删除数据卷
 - **评论**：`GET /api/comments?targetType={QUESTION|ANSWER}&targetId=`、`POST /api/comments`（支持 `parentId` 回复）、`DELETE /api/comments/{id}`
 - 教授：`GET /api/professors`、`GET /api/professors/{id}`、`POST /api/professors/apply`
 - **全站搜索**：`GET /api/public/search?keyword=&limit=`（聚合问答/教授/资讯/资料/指南）
-- **通知**：`GET /api/notifications`、`/unread-count`、`/unread-by-type`、`POST /{id}/read`、`POST /read-all`、
-  实时推送 `GET /api/notifications/stream?token=`（SseEmitter，替代旧 WebSocket）
+- **通知**：`GET /api/notifications`、`/unread-count`、`/unread-by-type`、`POST /{id}/read`、`POST /read-all`
+- **私信**：`GET/POST /api/conversations`、`GET /api/conversations/{id}/messages?beforeId=&afterId=`、
+  `POST /api/conversations/{id}/messages`（`clientMsgId` 幂等，`type=IMAGE|FILE` 承载富媒体）、
+  `POST /api/conversations/{id}/read`、`PATCH /api/conversations/{id}`（免打扰/置顶/隐藏）、
+  `POST /api/conversations/{id}/messages/{messageId}/recall`、`GET /api/conversations/unread-count`
+- **实时**：`GET /api/stream?token=`（单条 SSE，事件 `notification` / `message` / `read`；提交后推送）
 - 后台：`/api/admin/{questions,users,professors,areas,taxonomy,study-guides,news}`（需 `*:manage` 权限）
 
 ## 设计说明
@@ -167,5 +171,7 @@ docker compose down -v       # 停止并删除数据卷
   避免懒加载与 N+1。
 - **outbox**：`outbox_task` 表 + 定时轮询，邮件/短信失败按指数退避重试；未配置 SMTP 时降级为日志，
   本地无需任何外部服务即可跑通注册流程。
-- **搜索**：`pg_trgm` GIN 索引 + `%` 相似度算子，按标题相似度排序。
+- **搜索**：`pg_trgm` GIN 索引加速 `ILIKE` 子串匹配，`similarity` 仅用于排序（对中文短词召回更稳）。
+- **私信准入**：`user_interaction` 记录"教授回答学生问题"的关系，仅互动过的双方可建会话；
+  会话/成员/消息三表建模，未读为成员列上冗余计数，消息按自增 `id` 游标分页，实时经统一 SSE 流推送。
 - **支付**：`PaymentProvider` 抽象，默认 `MockPaymentProvider`；回调按 `(provider, tradeNo)` 幂等。

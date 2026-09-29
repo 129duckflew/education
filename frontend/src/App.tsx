@@ -16,6 +16,7 @@ import { GuidesPage } from "@/pages/GuidesPage"
 import { ResourcesPage } from "@/pages/ResourcesPage"
 import { SearchPage } from "@/pages/SearchPage"
 import { MessagesPage } from "@/pages/MessagesPage"
+import { ConversationPage } from "@/pages/ConversationPage"
 import { ProfilePage } from "@/pages/ProfilePage"
 import { NotFoundPage } from "@/pages/NotFoundPage"
 import { AdminDashboardPage } from "@/pages/admin/AdminDashboardPage"
@@ -65,6 +66,14 @@ export function App() {
           element={
             <RequireAuth>
               <MessagesPage />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="messages/:conversationId"
+          element={
+            <RequireAuth>
+              <ConversationPage />
             </RequireAuth>
           }
         />

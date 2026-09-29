@@ -1,12 +1,11 @@
 import { useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { api, type PageResponse } from "@/lib/api"
-import type { ConversationView, MessageView, NotificationView } from "@/lib/types"
+import type { ConversationView, NotificationView } from "@/lib/types"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
 import { EmptyState, LoadingState } from "@/components/ui/spinner"
 
 const typeLabels: Record<string, string> = {
@@ -19,6 +18,9 @@ const typeLabels: Record<string, string> = {
   ANSWER_LIKED: "回答被赞",
   ANSWER_COLLECTED: "回答被收藏",
   QUESTION_LIKED: "问题被赞",
+  COMMENT_ON_QUESTION: "问题收到评论",
+  COMMENT_ON_ANSWER: "回答收到评论",
+  REPLY_TO_COMMENT: "评论收到回复",
   PROFESSOR_APPROVED: "教授认证通过",
   PROFESSOR_REJECTED: "教授认证未通过",
 }
@@ -51,7 +53,6 @@ export function MessagesPage() {
 
 function Notifications() {
   const queryClient = useQueryClient()
-  const navigate = useNavigate()
   const query = useQuery({
     queryKey: ["notifications"],
     queryFn: () => api.get<PageResponse<NotificationView>>("/notifications?size=30"),
@@ -69,8 +70,6 @@ function Notifications() {
 
   function handleClick(n: NotificationView) {
     if (!n.read) markRead.mutate(n.id)
-    const link = notificationLink(n.type, n.resourceId)
-    if (link) navigate(link)
   }
 
   return (
@@ -106,66 +105,41 @@ function Notifications() {
   )
 }
 
-function notificationLink(type: string, resourceId: number | null): string | null {
-  if (resourceId == null) return null
-  if (type.startsWith("QUESTION_") || type === "COMMENT_ON_QUESTION") {
-    return `/questions/${resourceId}`
-  }
-  if (type.startsWith("PROFESSOR_")) {
-    return "/professor/center"
-  }
-  return null
-}
-
 function Conversations() {
   const query = useQuery({
     queryKey: ["conversations"],
-    queryFn: () => api.get<ConversationView[]>("/messages/conversations"),
+    queryFn: () => api.get<ConversationView[]>("/conversations"),
+    refetchInterval: 30_000,
   })
 
   if (query.isLoading) return <LoadingState />
-  if (!query.data?.length) return <EmptyState label="暂无私信" />
+  if (!query.data?.length) {
+    return <EmptyState label="暂无私信。可在教授主页点击「私信 TA」发起会话。" />
+  }
 
   return (
     <div className="space-y-3">
       {query.data.map((c) => (
-        <ConversationItem key={c.peerId} conversation={c} />
+        <Link key={c.id} to={`/messages/${c.id}`}>
+          <Card className={c.unread > 0 ? "border-primary/40 bg-primary/5" : ""}>
+            <CardContent className="flex items-center justify-between gap-3 p-4">
+              <div className="min-w-0">
+                <p className="flex items-center gap-2 text-sm font-medium">
+                  {c.peerName}
+                  {c.pinned && <Badge variant="outline">置顶</Badge>}
+                </p>
+                <p className="line-clamp-1 text-xs text-muted-foreground">
+                  {c.lastMessage ?? "开始对话"}
+                </p>
+              </div>
+              <div className="flex shrink-0 flex-col items-end gap-1 text-xs text-muted-foreground">
+                {c.lastAt && <span>{new Date(c.lastAt).toLocaleDateString("zh-CN")}</span>}
+                {c.unread > 0 && <Badge>{c.unread > 99 ? "99+" : c.unread}</Badge>}
+              </div>
+            </CardContent>
+          </Card>
+        </Link>
       ))}
     </div>
-  )
-}
-
-function ConversationItem({ conversation }: { conversation: ConversationView }) {
-  const queryClient = useQueryClient()
-  const [content, setContent] = useState("")
-  const messages = useQuery({
-    queryKey: ["messages", conversation.peerId],
-    queryFn: () => api.get<PageResponse<MessageView>>(`/messages/with/${conversation.peerId}?size=50`),
-  })
-  const send = useMutation({
-    mutationFn: () => api.post("/messages", { toUserId: conversation.peerId, content }),
-    onSuccess: () => {
-      setContent("")
-      queryClient.invalidateQueries({ queryKey: ["messages", conversation.peerId] })
-    },
-  })
-
-  return (
-    <Card>
-      <CardContent className="space-y-3 p-5">
-        <p className="font-medium">{conversation.peerName}</p>
-        <div className="max-h-64 space-y-2 overflow-y-auto rounded-md border p-3 text-sm">
-          {[...(messages.data?.list ?? [])].reverse().map((m) => (
-            <p key={m.id}>{m.content}</p>
-          ))}
-        </div>
-        <div className="flex gap-2">
-          <Input value={content} onChange={(e) => setContent(e.target.value)} placeholder="输入消息" />
-          <Button onClick={() => send.mutate()} disabled={!content || send.isPending}>
-            发送
-          </Button>
-        </div>
-      </CardContent>
-    </Card>
   )
 }

@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from "react"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { Star } from "lucide-react"
+import { MessageSquare, Star } from "lucide-react"
 import { api } from "@/lib/api"
 import type { ProfessorDetail } from "@/lib/types"
 import { useAuth } from "@/lib/auth"
@@ -16,10 +16,18 @@ export function ProfessorDetailPage() {
   const professorId = Number(id)
   const { user } = useAuth()
   const queryClient = useQueryClient()
+  const navigate = useNavigate()
 
   const query = useQuery({
     queryKey: ["professor", professorId],
     queryFn: () => api.get<ProfessorDetail>(`/professors/${professorId}`),
+  })
+
+  const openConversation = useMutation({
+    mutationFn: () => api.post<number>("/conversations", { peerId: professorId }),
+    onSuccess: (conversationId) => navigate(`/messages/${conversationId}`),
+    onError: (error) =>
+      window.alert(error instanceof Error ? error.message : "无法发起私信"),
   })
 
   if (query.isLoading) return <LoadingState />
@@ -35,10 +43,23 @@ export function ProfessorDetailPage() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle className="text-xl">{summary.realName}</CardTitle>
-            <span className="flex items-center gap-1 text-sm text-muted-foreground">
-              <Star className="size-4 fill-current text-amber-500" />
-              {summary.rating.toFixed(1)}（{summary.reviewCount} 条评价）
-            </span>
+            <div className="flex items-center gap-3">
+              {user && user.id !== professorId && (
+                <Button
+                  size="sm"
+                  variant="outline"
+                  disabled={openConversation.isPending}
+                  onClick={() => openConversation.mutate()}
+                >
+                  <MessageSquare />
+                  私信 TA
+                </Button>
+              )}
+              <span className="flex items-center gap-1 text-sm text-muted-foreground">
+                <Star className="size-4 fill-current text-amber-500" />
+                {summary.rating.toFixed(1)}（{summary.reviewCount} 条评价）
+              </span>
+            </div>
           </div>
           <p className="text-sm text-muted-foreground">{summary.jobRankName}</p>
         </CardHeader>
