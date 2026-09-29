@@ -133,12 +133,17 @@ export interface ResourceView {
   createdAt: string
 }
 
+export type NotificationAnchor = "ANSWER" | "QUESTION_COMMENT" | "ANSWER_COMMENT"
+
 export interface NotificationView {
   id: number
   fromUserId: number | null
   type: string
   resourceId: number | null
   relatedUserId: number | null
+  anchorType: NotificationAnchor | null
+  anchorId: number | null
+  anchorRefId: number | null
   read: boolean
   createdAt: string
 }

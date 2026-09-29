@@ -157,7 +157,9 @@ docker compose down -v       # 停止并删除数据卷
 - **评论**：`GET /api/comments?targetType={QUESTION|ANSWER}&targetId=`、`POST /api/comments`（支持 `parentId` 回复）、`DELETE /api/comments/{id}`
 - 教授：`GET /api/professors`、`GET /api/professors/{id}`、`POST /api/professors/apply`
 - **全站搜索**：`GET /api/public/search?keyword=&limit=`（聚合问答/教授/资讯/资料/指南）
-- **通知**：`GET /api/notifications`、`/unread-count`、`/unread-by-type`、`POST /{id}/read`、`POST /read-all`
+- **通知**：`GET /api/notifications`、`/unread-count`、`/unread-by-type`、`POST /{id}/read`、`POST /read-all`。
+  通知携带深链锚点（`resourceId` = 问题 id，`anchorType`+`anchorId`+`anchorRefId` 定位回答/评论），
+  前端点击可直接跳转到问题页并高亮、滚动到对应回答或评论（回答下的评论会自动展开）。
 - **私信**：`GET/POST /api/conversations`、`GET /api/conversations/{id}/messages?beforeId=&afterId=`、
   `POST /api/conversations/{id}/messages`（`clientMsgId` 幂等，`type=IMAGE|FILE` 承载富媒体）、
   `POST /api/conversations/{id}/read`、`PATCH /api/conversations/{id}`（免打扰/置顶/隐藏）、

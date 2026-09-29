@@ -28,7 +28,9 @@ public class MessageService {
                 : notificationRepository.findByToUserIdAndTypeOrderByCreatedAtDesc(userId, type, pageable);
         List<MessageDtos.NotificationView> views = page.getContent().stream()
                 .map(n -> new MessageDtos.NotificationView(n.getId(), n.getFromUserId(), n.getType(),
-                        n.getResourceId(), n.getRelatedUserId(), n.isRead(), n.getCreatedAt()))
+                        n.getResourceId(), n.getRelatedUserId(),
+                        n.getAnchorType(), n.getAnchorId(), n.getAnchorRefId(),
+                        n.isRead(), n.getCreatedAt()))
                 .toList();
         return new PageImpl<>(views, page.getPageable(), page.getTotalElements());
     }

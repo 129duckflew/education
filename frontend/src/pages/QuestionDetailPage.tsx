@@ -1,5 +1,5 @@
-import { useState, type FormEvent } from "react"
-import { useParams } from "react-router-dom"
+import { useEffect, useState, type FormEvent } from "react"
+import { useParams, useSearchParams } from "react-router-dom"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { Heart, MessageSquare, Star } from "lucide-react"
 import { api } from "@/lib/api"
@@ -18,11 +18,26 @@ export function QuestionDetailPage() {
   const questionId = Number(id)
   const { user } = useAuth()
   const queryClient = useQueryClient()
+  const [searchParams] = useSearchParams()
+
+  // 通知深链参数：answer=回答id，comment=评论id
+  const focusAnswerId = searchParams.get("answer") ? Number(searchParams.get("answer")) : null
+  const focusCommentId = searchParams.get("comment") ? Number(searchParams.get("comment")) : null
 
   const query = useQuery({
     queryKey: ["question", questionId],
     queryFn: () => api.get<QuestionDetail>(`/questions/${questionId}`),
   })
+
+  useEffect(() => {
+    if (focusAnswerId == null) return
+    const timer = setTimeout(() => {
+      document
+        .getElementById(`answer-${focusAnswerId}`)
+        ?.scrollIntoView({ behavior: "smooth", block: "start" })
+    }, 80)
+    return () => clearTimeout(timer)
+  }, [focusAnswerId, query.data])
 
   const invalidate = () => queryClient.invalidateQueries({ queryKey: ["question", questionId] })
 
@@ -43,7 +58,7 @@ export function QuestionDetailPage() {
 
   return (
     <div className="space-y-6">
-      <Card>
+      <Card id="question">
         <CardHeader>
           <div className="flex items-start justify-between gap-4">
             <CardTitle className="text-xl">{question.title}</CardTitle>
@@ -75,7 +90,12 @@ export function QuestionDetailPage() {
 
       <Card>
         <CardContent className="p-5">
-          <CommentSection targetType="QUESTION" targetId={questionId} title="问题评论" />
+          <CommentSection
+            targetType="QUESTION"
+            targetId={questionId}
+            title="问题评论"
+            focusCommentId={focusCommentId}
+          />
         </CardContent>
       </Card>
 
@@ -85,7 +105,14 @@ export function QuestionDetailPage() {
           回答（{answers.length}）
         </h2>
         {answers.map((answer) => (
-          <AnswerItem key={answer.id} answer={answer} onChanged={invalidate} canInteract={!!user} />
+          <AnswerItem
+            key={answer.id}
+            answer={answer}
+            onChanged={invalidate}
+            canInteract={!!user}
+            autoOpen={focusAnswerId === answer.id}
+            focusCommentId={focusCommentId}
+          />
         ))}
         {answers.length === 0 && (
           <p className="py-6 text-center text-sm text-muted-foreground">暂无回答</p>
@@ -103,12 +130,19 @@ function AnswerItem({
   answer,
   onChanged,
   canInteract,
+  autoOpen,
+  focusCommentId,
 }: {
   answer: AnswerView
   onChanged: () => void
   canInteract: boolean
+  autoOpen?: boolean
+  focusCommentId?: number | null
 }) {
-  const [showComments, setShowComments] = useState(false)
+  const [showComments, setShowComments] = useState(!!autoOpen)
+  useEffect(() => {
+    if (autoOpen) setShowComments(true)
+  }, [autoOpen])
   const like = useMutation({
     mutationFn: () =>
       answer.liked ? api.del(`/answers/${answer.id}/like`) : api.post(`/answers/${answer.id}/like`),
@@ -123,7 +157,7 @@ function AnswerItem({
   })
 
   return (
-    <Card>
+    <Card id={`answer-${answer.id}`}>
       <CardContent className="space-y-3 p-5">
         <div className="flex items-center justify-between">
           <span className="text-sm font-medium">{answer.professorName}</span>
@@ -160,7 +194,12 @@ function AnswerItem({
         </div>
         {showComments && (
           <div className="border-t border-border pt-4">
-            <CommentSection targetType="ANSWER" targetId={answer.id} title="回答评论" />
+            <CommentSection
+              targetType="ANSWER"
+              targetId={answer.id}
+              title="回答评论"
+              focusCommentId={focusCommentId}
+            />
           </div>
         )}
       </CardContent>

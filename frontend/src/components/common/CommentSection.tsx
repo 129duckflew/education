@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { MessageSquare, Reply, Trash2 } from "lucide-react"
 import { api } from "@/lib/api"
@@ -12,10 +12,12 @@ export function CommentSection({
   targetType,
   targetId,
   title = "评论",
+  focusCommentId,
 }: {
   targetType: CommentTargetType
   targetId: number
   title?: string
+  focusCommentId?: number | null
 }) {
   const { user } = useAuth()
   const queryClient = useQueryClient()
@@ -28,6 +30,17 @@ export function CommentSection({
     queryFn: () =>
       api.get<CommentView[]>(`/comments?targetType=${targetType}&targetId=${targetId}`),
   })
+
+  // 从通知深链进入时，滚动到目标评论
+  useEffect(() => {
+    if (focusCommentId == null) return
+    const timer = setTimeout(() => {
+      document
+        .getElementById(`comment-${focusCommentId}`)
+        ?.scrollIntoView({ behavior: "smooth", block: "center" })
+    }, 80)
+    return () => clearTimeout(timer)
+  }, [focusCommentId, query.data])
 
   const invalidate = () => {
     queryClient.invalidateQueries({ queryKey: ["comments", targetType, targetId] })
@@ -65,6 +78,7 @@ export function CommentSection({
           comment={comment}
           currentUserId={user?.id}
           isAdmin={user?.role === "ADMIN"}
+          focusCommentId={focusCommentId}
           replyTo={replyTo}
           replyContent={replyContent}
           onReplyToggle={(id) => {
@@ -112,6 +126,7 @@ function CommentItem({
   comment,
   currentUserId,
   isAdmin,
+  focusCommentId,
   replyTo,
   replyContent,
   onReplyToggle,
@@ -123,6 +138,7 @@ function CommentItem({
   comment: CommentView
   currentUserId?: number
   isAdmin: boolean
+  focusCommentId?: number | null
   replyTo: number | null
   replyContent: string
   onReplyToggle: (id: number) => void
@@ -132,8 +148,15 @@ function CommentItem({
   submitting: boolean
 }) {
   const canDelete = currentUserId === comment.userId || isAdmin
+  const focused = focusCommentId != null && focusCommentId === comment.id
   return (
-    <div className="space-y-2 rounded-lg border border-border p-3">
+    <div
+      id={`comment-${comment.id}`}
+      className={cn(
+        "space-y-2 rounded-lg border border-border p-3 transition-shadow",
+        focused && "border-primary ring-2 ring-primary/40",
+      )}
+    >
       <div className="flex items-center justify-between text-xs text-muted-foreground">
         <span className="font-medium text-foreground">{comment.userName}</span>
         <span>{new Date(comment.createdAt).toLocaleString("zh-CN")}</span>
@@ -176,6 +199,7 @@ function CommentItem({
               comment={reply}
               currentUserId={currentUserId}
               isAdmin={isAdmin}
+              focusCommentId={focusCommentId}
               replyTo={replyTo}
               replyContent={replyContent}
               onReplyToggle={onReplyToggle}

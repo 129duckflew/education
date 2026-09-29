@@ -13,6 +13,9 @@ public class MessageDtos {
             NotificationType type,
             Long resourceId,
             Long relatedUserId,
+            NotificationAnchor anchorType,
+            Long anchorId,
+            Long anchorRefId,
             boolean read,
             Instant createdAt
     ) {

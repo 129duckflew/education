@@ -2,6 +2,7 @@ package cn.duckflew.education.comment;
 
 import cn.duckflew.education.common.exception.BusinessException;
 import cn.duckflew.education.common.exception.ErrorCode;
+import cn.duckflew.education.messaging.NotificationAnchor;
 import cn.duckflew.education.messaging.NotificationService;
 import cn.duckflew.education.messaging.NotificationType;
 import cn.duckflew.education.qa.Answer;
@@ -39,7 +40,7 @@ public class CommentService {
 
     @Transactional
     public Long create(Long userId, CommentDtos.CreateRequest request) {
-        Long targetAuthorId = resolveTargetAuthor(request.targetType(), request.targetId());
+        Target target = resolveTarget(request.targetType(), request.targetId());
 
         Comment comment = new Comment();
         comment.setTargetType(request.targetType());
@@ -60,14 +61,18 @@ public class CommentService {
         }
         commentRepository.save(comment);
 
+        NotificationAnchor anchor = request.targetType() == CommentTargetType.QUESTION
+                ? NotificationAnchor.QUESTION_COMMENT
+                : NotificationAnchor.ANSWER_COMMENT;
         if (parentAuthorId != null) {
             notificationService.notify(parentAuthorId, userId, NotificationType.REPLY_TO_COMMENT,
-                    request.targetId(), userId);
-        } else if (targetAuthorId != null) {
+                    target.questionId(), userId, anchor, comment.getId(), target.answerId());
+        } else if (target.authorId() != null) {
             NotificationType type = request.targetType() == CommentTargetType.QUESTION
                     ? NotificationType.COMMENT_ON_QUESTION
                     : NotificationType.COMMENT_ON_ANSWER;
-            notificationService.notify(targetAuthorId, userId, type, request.targetId(), userId);
+            notificationService.notify(target.authorId(), userId, type,
+                    target.questionId(), userId, anchor, comment.getId(), target.answerId());
         }
         return comment.getId();
     }
@@ -117,15 +122,19 @@ public class CommentService {
                 c.getUserId(), name, avatar, c.getContent(), c.getParentId(), c.getCreatedAt(), replies);
     }
 
-    private Long resolveTargetAuthor(CommentTargetType type, Long targetId) {
+    private Target resolveTarget(CommentTargetType type, Long targetId) {
         if (type == CommentTargetType.QUESTION) {
             Question question = questionRepository.findById(targetId)
                     .orElseThrow(() -> new BusinessException(ErrorCode.QUESTION_NOT_FOUND));
-            return question.getAuthorId();
+            return new Target(question.getAuthorId(), question.getId(), null);
         }
         Answer answer = answerRepository.findById(targetId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.ANSWER_NOT_FOUND));
-        return answer.getProfessorId();
+        return new Target(answer.getProfessorId(), answer.getQuestionId(), answer.getId());
+    }
+
+    /** 评论目标解析结果：作者、所属问题、所属回答（问题评论时为 null）。 */
+    private record Target(Long authorId, Long questionId, Long answerId) {
     }
 
     private String displayName(User user) {

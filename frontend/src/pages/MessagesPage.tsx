@@ -1,6 +1,7 @@
 import { useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { ChevronRight } from "lucide-react"
 import { api, type PageResponse } from "@/lib/api"
 import type { ConversationView, NotificationView } from "@/lib/types"
 import { Badge } from "@/components/ui/badge"
@@ -53,6 +54,7 @@ export function MessagesPage() {
 
 function Notifications() {
   const queryClient = useQueryClient()
+  const navigate = useNavigate()
   const query = useQuery({
     queryKey: ["notifications"],
     queryFn: () => api.get<PageResponse<NotificationView>>("/notifications?size=30"),
@@ -70,6 +72,8 @@ function Notifications() {
 
   function handleClick(n: NotificationView) {
     if (!n.read) markRead.mutate(n.id)
+    const link = notificationLink(n)
+    if (link) navigate(link)
   }
 
   return (
@@ -80,29 +84,53 @@ function Notifications() {
         </Button>
       </div>
       {query.data?.list.length ? (
-        query.data.list.map((n) => (
-          <Card
-            key={n.id}
-            className={n.read ? "" : "border-primary/40 bg-primary/5"}
-            role="button"
-            tabIndex={0}
-            onClick={() => handleClick(n)}
-            onKeyDown={(e) => e.key === "Enter" && handleClick(n)}
-          >
-            <CardContent className="flex cursor-pointer items-center justify-between p-4 text-sm">
-              <span>{typeLabels[n.type] ?? n.type}</span>
-              <span className="flex items-center gap-3 text-xs text-muted-foreground">
-                {!n.read && <Badge>新</Badge>}
-                {new Date(n.createdAt).toLocaleString("zh-CN")}
-              </span>
-            </CardContent>
-          </Card>
-        ))
+        query.data.list.map((n) => {
+          const link = notificationLink(n)
+          return (
+            <Card
+              key={n.id}
+              className={n.read ? "" : "border-primary/40 bg-primary/5"}
+              role={link ? "button" : undefined}
+              tabIndex={link ? 0 : undefined}
+              onClick={() => handleClick(n)}
+              onKeyDown={(e) => e.key === "Enter" && handleClick(n)}
+            >
+              <CardContent className="flex cursor-pointer items-center justify-between p-4 text-sm">
+                <span>{typeLabels[n.type] ?? n.type}</span>
+                <span className="flex items-center gap-3 text-xs text-muted-foreground">
+                  {!n.read && <Badge>新</Badge>}
+                  {new Date(n.createdAt).toLocaleString("zh-CN")}
+                  {link && <ChevronRight className="size-4" />}
+                </span>
+              </CardContent>
+            </Card>
+          )
+        })
       ) : (
         <EmptyState label="暂无通知" />
       )}
     </div>
   )
+}
+
+/**
+ * 通知深链：打开对应问题，并定位到回答或具体评论。
+ * 后端约定 resourceId = 问题 id；anchorType/anchorId/anchorRefId 指明落地元素。
+ */
+function notificationLink(n: NotificationView): string | null {
+  if (n.type.startsWith("PROFESSOR_")) return "/professor/center"
+  if (n.resourceId == null) return null
+  const params = new URLSearchParams()
+  if (n.anchorType === "ANSWER" && n.anchorId != null) {
+    params.set("answer", String(n.anchorId))
+  } else if (n.anchorType === "QUESTION_COMMENT" && n.anchorId != null) {
+    params.set("comment", String(n.anchorId))
+  } else if (n.anchorType === "ANSWER_COMMENT" && n.anchorId != null) {
+    if (n.anchorRefId != null) params.set("answer", String(n.anchorRefId))
+    params.set("comment", String(n.anchorId))
+  }
+  const query = params.toString()
+  return `/questions/${n.resourceId}${query ? `?${query}` : ""}`
 }
 
 function Conversations() {

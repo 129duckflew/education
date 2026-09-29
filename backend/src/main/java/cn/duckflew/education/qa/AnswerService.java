@@ -3,6 +3,7 @@ package cn.duckflew.education.qa;
 import cn.duckflew.education.common.exception.BusinessException;
 import cn.duckflew.education.common.exception.ErrorCode;
 import cn.duckflew.education.interaction.InteractionService;
+import cn.duckflew.education.messaging.NotificationAnchor;
 import cn.duckflew.education.messaging.NotificationService;
 import cn.duckflew.education.messaging.NotificationType;
 import cn.duckflew.education.qa.dto.AnswerRequest;
@@ -63,7 +64,8 @@ public class AnswerService {
         answer.setStatus(AnswerStatus.NORMAL);
         answerRepository.save(answer);
         notificationService.notify(question.getAuthorId(), professorId,
-                NotificationType.ANSWER_RECEIVED, answer.getId(), professorId);
+                NotificationType.ANSWER_RECEIVED, question.getId(), professorId,
+                NotificationAnchor.ANSWER, answer.getId(), null);
         // 建立互动关系，解锁双方私信
         interactionService.record(question.getAuthorId(), professorId);
         return answer;
@@ -104,7 +106,8 @@ public class AnswerService {
             like.setAnswerId(answerId);
             answerLikeRepository.save(like);
             notificationService.notify(answer.getProfessorId(), userId,
-                    NotificationType.ANSWER_LIKED, answerId, userId);
+                    NotificationType.ANSWER_LIKED, answer.getQuestionId(), userId,
+                    NotificationAnchor.ANSWER, answerId, null);
         }
     }
 
@@ -122,7 +125,8 @@ public class AnswerService {
             collect.setAnswerId(answerId);
             answerCollectRepository.save(collect);
             notificationService.notify(answer.getProfessorId(), userId,
-                    NotificationType.ANSWER_COLLECTED, answerId, userId);
+                    NotificationType.ANSWER_COLLECTED, answer.getQuestionId(), userId,
+                    NotificationAnchor.ANSWER, answerId, null);
         }
     }
 
