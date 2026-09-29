@@ -97,7 +97,17 @@ public class UserService {
     @Transactional(readOnly = true)
     public Page<UserProfile> search(String keyword, UserRole role, Pageable pageable) {
         String normalized = (keyword == null || keyword.isBlank()) ? null : keyword.trim();
-        return userRepository.search(normalized, role, pageable).map(UserProfile::from);
+        Page<User> page;
+        if (normalized == null) {
+            page = role == null
+                    ? userRepository.findAll(pageable)
+                    : userRepository.findByRole(role, pageable);
+        } else {
+            page = role == null
+                    ? userRepository.searchByKeyword(normalized, pageable)
+                    : userRepository.searchByKeywordAndRole(normalized, role, pageable);
+        }
+        return page.map(UserProfile::from);
     }
 
     @Transactional
